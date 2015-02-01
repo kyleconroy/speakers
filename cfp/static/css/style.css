@@ -1,0 +1,368 @@
+#honeypot {
+  display: none;
+}
+
+.button-success {
+  color: #fff;
+  background: rgb(28, 184, 65); /* this is a green */
+}
+
+body {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+#header-container {
+  background: #f5f5f5;
+  padding: 5px 0;
+  border-bottom: 1px #d5d5d5 solid;
+}
+
+#submitcfp {
+  float: right;
+  margin-right: 5px;
+}
+
+.site-title span, .site-title img {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.site-title img {
+  width: 35px;
+}
+
+.site-title span {
+  font-size: 20px;
+}
+
+footer {
+  padding: 10px;
+}
+
+a.site-title {
+  font-size: 20px;
+  text-decoration: none;
+  color: #231f20;
+  margin-left: 10px;
+}
+
+ul.table-list {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  list-style-type: none;
+}
+
+ul.table-list li {
+  padding: 10px;
+  border-top: 1px solid #d5d5d5;
+}
+
+
+ul.table-list li:hover {
+  background: #f5f5f5;
+}
+
+.table-list-header {
+  display: none;
+  background: #ccc;
+}
+
+.table-list-cell {
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-light {
+  font-weight: 300;
+}
+
+.call-date, .call-city, .call-close, .call-country , .call-days, .call-tagline {
+  font-weight: 300;
+}
+
+.call-date {
+  display: inline;
+  font-size: 14px;
+  min-width: 120px;
+}
+
+.call-date:after {
+  content: " in "
+}
+
+.call-city, .call-country {
+  display: inline;
+  font-size: 14px;
+  min-width: 100px;
+}
+
+.call-city:after {
+  content: ", "
+}
+
+.call-tagline {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.call-close {
+  font-size: 14px;
+}
+
+.call-days {
+  text-align: right;
+  font-size: 14px;
+  display: none;
+}
+
+.call-link {
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+
+.call-link:hover {
+  text-decoration: none;
+  color: blue;
+}
+
+.conference {
+  padding: 0 10px;
+}
+
+.row {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+#follow p {
+  padding: 10px;
+  margin: 0;
+}
+
+#mc-embedded-subscribe-form {
+  display: none;
+}
+
+#mce-EMAIL {
+  display: inline-block;
+  width: 150px;
+  font-weight: 300;
+}
+
+#mc-embedded-subscribe {
+  display: inline-block;
+}
+
+.box {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.twitter, .email, .rss {
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.twitter i, .twitter:hover {
+  color: blue;
+}
+
+.email i, .email:hover {
+  color: grey;
+}
+
+.rss i, .rss:hover {
+  color: orange;
+}
+
+.conference-detail a {
+  text-decoration: none;
+  color: #53a0f8;
+}
+
+.fa-holder {
+  display: inline-block;
+  text-align: center;
+  width: 15px;
+}
+
+#call-close-notification {
+  margin: 10px 0;
+  background: #cef1fa;
+  text-align: center;
+  border-radius: 5px;
+  border: 1px solid #78d3ea;
+  padding: 10px 0;
+}
+
+.calendar {
+  display: inline-block;
+  vertical-align: middle;
+  background-image: url('../img/calendar.png');
+  background-repeat: no-repeat;
+  background-size: 70px 249px;
+  text-align: center;
+  width: 70px;
+  font-size: 30px;
+  height: 50px;
+  padding: 30px 0 0 0;
+  margin: 0 10px;
+  overflow: hidden;
+}
+
+.calendar-text {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 24px;
+  width: 75%;
+}
+
+.calendar-text span {
+  display: inline-block;
+}
+
+.calendar-days {
+  background-position: 0 -85px;
+}
+
+.calendar-closed {
+  background-position: 0 -170px;
+}
+
+.conference-title {
+  text-decoration: none;
+}
+
+.conference-tagline {
+  font-weight: 300;
+  font-size: 18px;
+  font-style: italic;
+  margin-top: 5px;
+}
+
+.conference-title h1 {
+  margin-bottom: 0px;
+}
+
+.conference-detail {
+  margin-bottom: 3px;
+}
+
+.conference-detail a:hover {
+  color: #176ccd;
+}
+
+.conference-detail i{
+  color: #bbb;
+}
+
+.conference-detail a:hover i{
+  color: #000000;
+}
+
+.conference-box {
+  padding: 0 10px;
+}
+
+.talk-form input, .talk-form textarea {
+  margin-bottom: 10px;
+}
+
+.talk-form label {
+  display: block;
+  font-weight: bold;
+  padding-right: 10px;
+}
+
+.required {
+  color: red;
+}
+
+.talk-form textarea {
+  height: 120px;
+}
+
+.form-divider {
+  margin: 10px 0 10px 0;
+  border-bottom: 1px solid #d5d5d5;
+}
+
+.talk-form .pure-controls {
+  text-align: right;
+}
+
+@media screen and (min-width: 568px) {
+  li.table-list-header {
+    display: table-row;
+  }
+
+  ul.table-list {
+    display: table;
+  }
+
+  ul.table-list li {
+    padding: 0;
+    display: table-row;
+    border: 0px;
+  }
+
+  .table-list-cell {
+    padding: 10px;
+    display: table-cell;
+    vertical-align: middle;
+    border-top: 1px solid #d5d5d5;
+  }
+
+  .call-tagline {
+    margin-bottom: 0;
+  }
+
+  .call-close {
+    display: none;
+  }
+
+  .call-city, .call-date {
+    text-align: right;
+  }
+
+  .call-date:after, .call-city:after {
+    content: ""
+  }
+
+  .talk-form label {
+    text-align: right;
+  }
+  
+  header {
+    text-align: left;
+  }
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+  
+@media screen and (min-width: 768px) {
+  .box {
+    margin-bottom: 0px;
+  }
+
+  #mc-embedded-subscribe-form {
+    display: block;
+  }
+
+  a.email {
+    display: none;
+  }
+}

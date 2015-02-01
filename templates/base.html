@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %}Find your voice{% endblock %} - Call to Speakers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Call to Speakers is a list of open applications for conference talks. Get notified of new opportunities via a weekly newsletter, Twitter account, or RSS feed. Never miss a submission deadline again.">
+    <link rel="shortcut icon" href="/static/icons/favicon.ico">
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/icons/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/icons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/icons/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/icons/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/icons/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/icons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/icons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/icons/apple-touch-icon-152x152.png">
+    <link rel="icon" type="image/png" href="/static/icons/favicon-196x196.png" sizes="196x196">
+    <link rel="icon" type="image/png" href="/static/icons/favicon-160x160.png" sizes="160x160">
+    <link rel="icon" type="image/png" href="/static/icons/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/static/icons/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" sizes="32x32">
+    <meta name="msapplication-TileColor" content="#ffc40d">
+    <meta name="msapplication-TileImage" content="/static/icons/mstile-144x144.png">
+    <meta name="msapplication-config" content="/static/icons/browserconfig.xml">
+
+    <link rel="alternate" type="application/rss+xml" title="Call to Speakers RSS Feed" href="https://calltospeakers.com/feed">
+    <link rel="stylesheet" href="/static/css/pure-min.css">
+    <link rel="stylesheet" href="/static/css/grids-responsive-min.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/style.css?version=6">
+  </head>
+  <body>
+    <div id="header-container">
+      <div class="container">
+        <header>
+          <a class="site-title" href="/"><img src="/static/img/logo-md.png"> <span>Call to Speakers<span></a>
+          <a id="submitcfp" class="pure-button button-success" href="/conferences/new"><i class="fa fa-plus-square"></i> Submit a CFP</a>
+        </header>
+      </div>
+    </div>
+    <div class="container">
+      <div>
+        {% block content %}{% endblock %}
+      </div>
+      <footer>
+        <p>Send questions and comments to <a href="mailto:contact@calltospeakers.com">contact@calltospeakers.com</a></p>
+      </footer>
+    </div>
+    <script src="https://www.google-analytics.com/analytics.js" async></script>
+    <script src="/static/js/ga.js"></script>
+  </body>
+</html>
