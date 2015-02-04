@@ -39,6 +39,7 @@ class Common(Configuration):
         'django.contrib.messages',
         'django.contrib.staticfiles',
 
+        'markdown_deux',
         'cfp',
     )
 

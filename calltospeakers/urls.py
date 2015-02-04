@@ -14,7 +14,7 @@ urlpatterns = [
         name='conference_create'
     ),
     url(
-        r'^(?P<slug>\w+)/(?P<year>\d+)$',
+        r'^(?P<slug>[\w-]+)/(?P<year>\d+)$',
         views.CallDetail.as_view(),
         name='call_read'
     ),

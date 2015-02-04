@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load markdown_deux_tags %}
+
 {% block title %} {{call.conference.name}} {{call.conference.start.year}}{% endblock %}
 
 
@@ -26,7 +28,7 @@
           <div>
             <span class="conference-detail fa-holder">
               <i class="fa fa-map-marker"></i></span>
-            {{ conf.place }}</div>
+            {{conf.city}}, {{ conf.country.name }}</div>
           </br>
         </div>
 
@@ -34,14 +36,14 @@
           {% if conf.website_url %}
           <div class="conference-detail">
             <a href="{{ conf.website_url }}">
-              <i class="fa fa-link"></i> {{ conf.website_url.domain }}
+              <i class="fa fa-link"></i> {{ conf.website_domain }}
             </a>
           </div>
           {% endif %}
 
-          {% if conf.twitter_url %}
+          {% if conf.twitter_handle %}
           <div class="conference-detail">
-            <a href="{{ conf.twitter_url }}">
+            <a href="https://twitter.com/{{ conf.twitter_url }}">
               <i class="fa fa-twitter"></i> @{{ conf.twitter_handle }}
             </a>
           </div>
@@ -157,7 +159,7 @@
         {% else %}
         <a href="{{ call.application_url }}" class="pure-button pure-button-primary">Submit a talk today!</a>
         <article class="post-content">
-          {{ conf.description }}
+          {{ conf.description|markdown }}
         </article>
         {% endif %}
       </div>

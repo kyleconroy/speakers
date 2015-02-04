@@ -40,7 +40,7 @@ class CallDetail(DetailView):
         if queryset is None:
             queryset = self.get_queryset()
         queryset = queryset.filter(conference__start__year=self.kwargs['year'],
-                        conference__slug=self.kwargs['slug'])
+                                   conference__slug=self.kwargs['slug'])
         return queryset.get()
 
 
@@ -50,6 +50,7 @@ class CallList(ListView):
 
     def get_queryset(self):
         qs = super(CallList, self).get_queryset()
-        return qs.filter(approved=True,
-                         start__lte=datetime.utcnow(),
-                         end__gte=datetime.utcnow())
+        qs = qs.filter(approved=True,
+                       start__lte=datetime.utcnow(),
+                       end__gte=datetime.utcnow())
+        return qs.order_by('end')

@@ -1,4 +1,5 @@
 from datetime import datetime
+import urllib.parse
 
 from django.db import models
 from django.core.urlresolvers import reverse
@@ -9,26 +10,30 @@ from django_countries.fields import CountryField
 class Conference(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
-    slug = models.CharField(max_length=45, db_index=True)
-    name = models.CharField(max_length=45)
+    slug = models.CharField(max_length=100, db_index=True)
+    legacy_slug = models.CharField(max_length=100, db_index=True)
+    name = models.CharField(max_length=200)
 
     venue = models.CharField(max_length=100, blank=True)
     city = models.CharField(max_length=100)
     country = CountryField(default='US')
     state = models.CharField(max_length=100, blank=True)
 
-    tagline = models.CharField(max_length=250)
+    tagline = models.CharField(max_length=255)
     description = models.TextField()
 
-    twitter_handle = models.CharField(max_length=15, blank=True)
+    twitter_handle = models.CharField(max_length=20, blank=True)
     twitter_hashtag = models.CharField(max_length=20, blank=True)
 
     start = models.DateField(db_index=True)
     end = models.DateField(db_index=True)
 
-    maps_url = models.URLField(max_length=300, blank=True)
-    website_url = models.URLField()
-    conduct_url = models.URLField(blank=True)
+    maps_url = models.URLField(max_length=1000, blank=True)
+    website_url = models.URLField(max_length=500)
+    conduct_url = models.URLField(max_length=500, blank=True)
+
+    def website_domain(self):
+        return urllib.parse.urlparse(self.website_url).netloc
 
     def __str__(self):
         return "{} {}".format(self.name, self.start.year)
@@ -50,7 +55,8 @@ class Call(models.Model):
     start = models.DateField(db_index=True)
     end = models.DateField(db_index=True)
     notify = models.DateField()
-    lanyrd_url = models.URLField(blank=True)
+    lanyrd_url = models.URLField(max_length=500, blank=True)
+    application_url = models.URLField(max_length=1000, blank=True)
     approved = models.BooleanField(db_index=True, default=False)
 
     def get_absolute_url(self):
