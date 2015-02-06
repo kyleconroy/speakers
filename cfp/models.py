@@ -14,13 +14,14 @@ class Conference(models.Model):
     legacy_slug = models.CharField(max_length=100, db_index=True)
     name = models.CharField(max_length=200)
 
-    venue = models.CharField(max_length=100, blank=True)
+    venue_name = models.CharField(max_length=100, blank=True)
+    venue_address = models.CharField(max_length=255, blank=True)
     city = models.CharField(max_length=100)
     country = CountryField(default='US')
     state = models.CharField(max_length=100, blank=True)
 
     tagline = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True)
 
     twitter_handle = models.CharField(max_length=20, blank=True)
     twitter_hashtag = models.CharField(max_length=20, blank=True)
@@ -31,6 +32,7 @@ class Conference(models.Model):
     maps_url = models.URLField(max_length=1000, blank=True)
     website_url = models.URLField(max_length=500)
     conduct_url = models.URLField(max_length=500, blank=True)
+    lanyrd_url = models.URLField(max_length=500, blank=True, unique=True)
 
     def website_domain(self):
         return urllib.parse.urlparse(self.website_url).netloc
@@ -52,10 +54,11 @@ class Conference(models.Model):
 class Call(models.Model):
     conference = models.ForeignKey('Conference')
     created = models.DateTimeField(auto_now_add=True)
+    description = models.TextField(blank=True)
     start = models.DateField(db_index=True)
     end = models.DateField(db_index=True)
     notify = models.DateField()
-    lanyrd_url = models.URLField(max_length=500, blank=True)
+    lanyrd_url = models.URLField(max_length=500, blank=True, unique=True)
     application_url = models.URLField(max_length=1000, blank=True)
     approved = models.BooleanField(db_index=True, default=False)
 
