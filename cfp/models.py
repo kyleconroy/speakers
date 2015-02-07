@@ -61,6 +61,7 @@ class Call(models.Model):
     lanyrd_url = models.URLField(max_length=500, blank=True, unique=True)
     application_url = models.URLField(max_length=1000, blank=True)
     approved = models.BooleanField(db_index=True, default=False)
+    tweet_id = models.IntegerField(db_index=True)
 
     def get_absolute_url(self):
         return reverse('call_read',
