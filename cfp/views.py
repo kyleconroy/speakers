@@ -51,7 +51,7 @@ class CallList(ListView):
 
     def get_queryset(self):
         qs = super(CallList, self).get_queryset()
-        qs = qs.filter(approved=True,
+        qs = qs.filter(state='approved',
                        start__lte=datetime.utcnow(),
                        end__gte=datetime.utcnow())
         return qs.order_by('end')
@@ -65,8 +65,9 @@ class LatestCallsFeed(Feed):
                    "speakers")
 
     def items(self):
-        qs = Call.objects.filter(approved=True, start__gte=datetime.utcnow())
-        return qs.order_by('-created')[:50]
+        return Call.objects.\
+            filter(state='approved', start__gte=datetime.utcnow()).\
+            order_by('-created')[:50]
 
     def item_title(self, item):
         return item.name

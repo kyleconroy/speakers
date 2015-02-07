@@ -5,6 +5,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 
 from django_countries.fields import CountryField
+from django_fsm import FSMField, transition
 
 
 class Conference(models.Model):
@@ -60,8 +61,8 @@ class Call(models.Model):
     notify = models.DateField()
     lanyrd_url = models.URLField(max_length=500, blank=True, unique=True)
     application_url = models.URLField(max_length=1000, blank=True)
-    approved = models.BooleanField(db_index=True, default=False)
     tweet_id = models.IntegerField(db_index=True)
+    state = FSMField(default='new', protected=True, db_index=True)
 
     def get_absolute_url(self):
         return reverse('call_read',
@@ -72,3 +73,11 @@ class Call(models.Model):
 
     def days_left(self):
         return (self.end - datetime.utcnow().date()).days
+
+    @transition(field=state, source='new', target='approved')
+    def approve(self):
+        pass
+
+    @transition(field=state, source='*', target='rejected')
+    def rejected(self):
+        pass

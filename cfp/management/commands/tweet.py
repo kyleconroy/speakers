@@ -41,7 +41,7 @@ class Command(BaseCommand):
             self.stdout.write("skipping last tweet was less than 3 hours ago")
             return
 
-        call = Call.objects.filter(tweet_id=0)[0]
+        call = Call.objects.filter(tweet_id=0, state='approved')[0]
 
         for message in self.messages(call):
             try:
