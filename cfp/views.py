@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.contrib.syndication.views import Feed
 from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView
@@ -54,3 +55,24 @@ class CallList(ListView):
                        start__lte=datetime.utcnow(),
                        end__gte=datetime.utcnow())
         return qs.order_by('end')
+
+
+class LatestCallsFeed(Feed):
+    title = "Call to Speakers - Find Your Voice"
+    link = "https://calltospeakers.com/feed"
+    description = ("Start speaking at conferences today. Call to Speakers"
+                   "helps you find conferences that are actively looking for"
+                   "speakers")
+
+    def items(self):
+        qs = Call.objects.filter(approved=True, start__gte=datetime.utcnow())
+        return qs.order_by('-created')[:50]
+
+    def item_title(self, item):
+        return item.name
+
+    def item_description(self, item):
+        return item.description
+
+    def item_pubdate(self, item):
+        return item.created

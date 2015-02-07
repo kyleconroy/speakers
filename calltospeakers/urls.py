@@ -8,10 +8,16 @@ urlpatterns = [
     url(
         r'^admin/',
         include(admin.site.urls)
-    ), url(
+    ),
+    url(
         r'^conferences/new$',
         views.ConferenceCreate.as_view(),
         name='conference_create'
+    ),
+    url(
+        r'^feed$',
+        views.LatestCallsFeed(),
+        name='call_feed'
     ),
     url(
         r'^(?P<slug>[\w-]+)/(?P<year>\d+)$',
