@@ -2,6 +2,7 @@ Django==1.7.4
 Werkzeug==0.9.6
 beautifulsoup4==4.3.2
 dj-database-url==0.3.0
+django-bootstrap3==5.1.1
 django-configurations==0.8
 django-countries==3.1.1
 django-debug-toolbar==1.2.2
