@@ -1,37 +1,105 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.contrib.syndication.views import Feed
+from django.core.urlresolvers import reverse
 from django.views.generic import DetailView
 from django.views.generic import ListView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 from django.utils.text import slugify
 
 from cfp.models import Call
 from cfp.models import Conference
 
+CONFERENCE_FIELDS = (
+    'name',
+    'start',
+    'end',
+    'website_url',
+    'conduct_url',
+    'tagline',
+    'description',
+    'twitter_handle',
+    'twitter_hashtag',
+    'venue_name',
+    'venue_address',
+    'city',
+    'state',
+    'country',
+)
+
+CALL_FIELDS = (
+    'description',
+    'start',
+    'end',
+    'notify',
+    'application_url',
+)
+
+
+def legacy(r, year, slug):
+    legacy = "{}-{}".format(year, slug)
+    return redirect(get_object_or_404(Conference, legacy_slug=legacy),
+                    permanent=True)
+
 
 class ConferenceCreate(CreateView):
     model = Conference
-    fields = [
-        'name',
-        'start',
-        'end',
-        'website_url',
-        'conduct_url',
-        'tagline',
-        'description',
-        'twitter_handle',
-        'twitter_hashtag',
-        'venue_name',
-        'venue_address',
-        'city',
-        'state',
-        'country',
-    ]
+    fields = CONFERENCE_FIELDS
 
     def form_valid(self, form):
         form.instance.slug = slugify(form.cleaned_data['name'])
         return super(ConferenceCreate, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('call_create',
+                       args=[self.object.slug, self.object.start.year])
+
+
+class ConferenceEdit(UpdateView):
+    model = Conference
+    fields = CONFERENCE_FIELDS
+
+    def form_valid(self, form):
+        form.instance.slug = slugify(form.cleaned_data['name'])
+        return super(ConferenceEdit, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('confernce_edit',
+                       args=[self.object.slug, self.object.start.year])
+
+
+class CallCreate(CreateView):
+    model = Call
+    fields = CALL_FIELDS
+
+    def form_valid(self, form):
+        conf = get_object_or_404(Conference, start__year=self.kwargs['year'],
+                                 slug=self.kwargs['slug'])
+        form.instance.conference = conf
+
+        if form.instance.notify is None:
+            form.instance.notify = form.instance.end + timedelta(days=7)
+
+        return super(CallCreate, self).form_valid(form)
+
+
+class CallEdit(UpdateView):
+    model = Call
+    fields = CALL_FIELDS
+
+    def form_valid(self, form):
+        if form.instance.notify is None:
+            form.instance.notify = form.instance.end + timedelta(days=7)
+        return super(CallEdit, self).form_valid(form)
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        queryset = queryset.filter(conference__start__year=self.kwargs['year'],
+                                   conference__slug=self.kwargs['slug'])
+        return queryset[0]
 
 
 class CallDetail(DetailView):
@@ -43,7 +111,7 @@ class CallDetail(DetailView):
             queryset = self.get_queryset()
         queryset = queryset.filter(conference__start__year=self.kwargs['year'],
                                    conference__slug=self.kwargs['slug'])
-        return queryset.get()
+        return queryset[0]
 
 
 class CallList(ListView):

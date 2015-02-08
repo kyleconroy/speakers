@@ -3,10 +3,11 @@
 {% load bootstrap3 %}
 
 {% block content %}
+
 {% if form.instance.pk %}
-  <h1>Edit {{ conference.name }}</h1>
+  <h1>Edit existing CFP</h1>
 {% else %}
-  <h1>Add a new conference</h1>
+  <h1>Add a new CFP</h1>
 {% endif %}
 
 {% bootstrap_css %}
@@ -16,7 +17,7 @@
     {% bootstrap_form form %}
     {% buttons %}
         <button type="submit" class="btn btn-primary">
-            {% if form.instance.pk %}Edit Conference{% else %}Create Conference{% endif %}
+          {% if form.instance.pk %}Edit CFP{% else %}Create CFP{% endif %}
         </button>
     {% endbuttons %}
 </form>

@@ -40,6 +40,7 @@ class Common(Configuration):
         'django.contrib.staticfiles',
 
         'markdown_deux',
+        'bootstrap3',
         'cfp',
     )
 

@@ -22,7 +22,7 @@ class Conference(models.Model):
     state = models.CharField(max_length=100, blank=True)
 
     tagline = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
+    description = models.TextField()
 
     twitter_handle = models.CharField(max_length=20, blank=True)
     twitter_hashtag = models.CharField(max_length=20, blank=True)
@@ -33,7 +33,7 @@ class Conference(models.Model):
     maps_url = models.URLField(max_length=1000, blank=True)
     website_url = models.URLField(max_length=500)
     conduct_url = models.URLField(max_length=500, blank=True)
-    lanyrd_url = models.URLField(max_length=500, blank=True, unique=True)
+    lanyrd_url = models.URLField(max_length=500, blank=True)
 
     def website_domain(self):
         return urllib.parse.urlparse(self.website_url).netloc
@@ -47,6 +47,9 @@ class Conference(models.Model):
         return "{} - {}".format(self.start.strftime("%b %d"),
                                 self.start.strftime("%d, %Y"))
 
+    def get_absolute_url(self):
+        return reverse('call_read', args=[self.slug, self.start.year])
+
     class Meta:
         unique_together = ('slug', 'start')
         ordering = ['slug', 'start']
@@ -58,10 +61,10 @@ class Call(models.Model):
     description = models.TextField(blank=True)
     start = models.DateField(db_index=True)
     end = models.DateField(db_index=True)
-    notify = models.DateField()
-    lanyrd_url = models.URLField(max_length=500, blank=True, unique=True)
+    notify = models.DateField(blank=True)
+    lanyrd_url = models.URLField(max_length=500, blank=True)
     application_url = models.URLField(max_length=1000, blank=True)
-    tweet_id = models.IntegerField(db_index=True)
+    tweet_id = models.IntegerField(db_index=True, default=0)
     state = FSMField(default='new', protected=True, db_index=True)
 
     def get_absolute_url(self):
@@ -79,5 +82,5 @@ class Call(models.Model):
         pass
 
     @transition(field=state, source='*', target='rejected')
-    def rejected(self):
+    def reject(self):
         pass

@@ -20,6 +20,26 @@ urlpatterns = [
         name='call_feed'
     ),
     url(
+        r'^(?P<year>\d+)/(?P<slug>[\w-]+)$',
+        views.legacy,
+        name='legacy_redirect'
+    ),
+    url(
+        r'^(?P<slug>[\w-]+)/(?P<year>\d+)/call/new$',
+        views.CallCreate.as_view(),
+        name='call_create'
+    ),
+    url(
+        r'^(?P<slug>[\w-]+)/(?P<year>\d+)/call/edit$',
+        views.CallEdit.as_view(),
+        name='call_edit'
+    ),
+    url(
+        r'^(?P<slug>[\w-]+)/(?P<year>\d+)/edit$',
+        views.ConferenceEdit.as_view(),
+        name='conference_edit'
+    ),
+    url(
         r'^(?P<slug>[\w-]+)/(?P<year>\d+)$',
         views.CallDetail.as_view(),
         name='call_read'

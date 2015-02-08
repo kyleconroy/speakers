@@ -10,18 +10,20 @@ class CallInline(admin.StackedInline):
     readonly_fields = ('state',)
 
 
-def make_approved(modeladmin, request, queryset):
+def make_all_approved(modeladmin, request, queryset):
     for conf in queryset.all():
-        conf.call.approve()
-        conf.call.save()
-make_approved.short_description = "Mark selected calls as approved"
+        for call in conf.call_set.all():
+            call.approve()
+            call.save()
+make_all_approved.short_description = "Mark selected calls as approved"
 
 
-def make_rejected(modeladmin, request, queryset):
+def make_all_rejected(modeladmin, request, queryset):
     for conf in queryset.all():
-        conf.call.reject()
-        conf.call.save()
-make_rejected.short_description = "Mark selected calls as rejected"
+        for call in conf.call_set.all():
+            call.reject()
+            call.save()
+make_all_rejected.short_description = "Mark selected calls as rejected"
 
 
 @admin.register(Conference)
@@ -31,10 +33,25 @@ class ConferenceAdmin(admin.ModelAdmin):
     ]
     list_filter = ('call__state',)
     list_display = ('name', 'start', 'end')
-    actions = [make_approved, make_rejected]
+    actions = [make_all_approved, make_all_rejected]
+
+
+def make_approved(modeladmin, request, queryset):
+    for call in queryset.all():
+        call.approve()
+        call.save()
+make_approved.short_description = "Mark selected calls as approved"
+
+
+def make_rejected(modeladmin, request, queryset):
+    for call in queryset.all():
+        call.reject()
+        call.save()
+make_rejected.short_description = "Mark selected calls as rejected"
 
 
 @admin.register(Call)
 class CallAdmin(admin.ModelAdmin):
     list_display = ('conference', 'start', 'end', 'state')
     readonly_fields = ('state',)
+    actions = [make_approved, make_rejected]

@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -25,10 +26,10 @@
     <meta name="msapplication-config" content="/static/icons/browserconfig.xml">
 
     <link rel="alternate" type="application/rss+xml" title="Call to Speakers RSS Feed" href="https://calltospeakers.com/feed">
-    <link rel="stylesheet" href="/static/css/pure-min.css">
-    <link rel="stylesheet" href="/static/css/grids-responsive-min.css">
-    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/static/css/style.css?version=6">
+    <link rel="stylesheet" href="{% static "css/pure-min.css" %}">
+    <link rel="stylesheet" href="{% static "css/grids-responsive-min.css" %}">
+    <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
   </head>
   <body>
     <div id="header-container">
