@@ -187,6 +187,15 @@ class Command(BaseCommand):
                 self.stdout.write("errored {}".format(conference_url))
                 continue
 
+            try:
+                e = Conference.objects.get(slug=conf.slug, start=conf.start)
+                e.lanyrd_url = conf.lanyrd_url
+                e.save()
+                self.stdout.write("updated {}".format(conference_url))
+                continue
+            except Conference.DoesNotExist:
+                pass
+
             call = self.parse_call(url)
             if call is None:
                 self.stdout.write("error parsing call {}".format(url))
