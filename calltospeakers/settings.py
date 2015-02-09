@@ -102,6 +102,10 @@ class Production(Common):
         'raven.contrib.django.raven_compat',
     )
 
+    ALLOWED_HOSTS = [
+        'speakers.herokuapp.com',
+    ]
+
     # django-secure
     SESSION_COOKIE_SECURE = values.BooleanValue(True)
     SECURE_SSL_REDIRECT = values.BooleanValue(True)
