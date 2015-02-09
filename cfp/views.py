@@ -139,7 +139,7 @@ class LatestCallsFeed(Feed):
             order_by('-created')[:50]
 
     def item_title(self, item):
-        return item.name
+        return item.conference.name
 
     def item_description(self, item):
         return item.description
