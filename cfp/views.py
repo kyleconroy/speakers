@@ -135,7 +135,7 @@ class LatestCallsFeed(Feed):
 
     def items(self):
         return Call.objects.\
-            filter(state='approved', start__gte=datetime.utcnow()).\
+            filter(state='approved', start__lte=datetime.utcnow()).\
             order_by('-created')[:50]
 
     def item_title(self, item):
