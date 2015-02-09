@@ -20,6 +20,8 @@ class Common(Configuration):
         BASE_DIR + '/templates/',
     )
 
+    STATIC_ROOT = BASE_DIR + "/static/"
+
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = values.SecretValue()
 
