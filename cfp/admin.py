@@ -33,6 +33,7 @@ class ConferenceAdmin(admin.ModelAdmin):
     ]
     list_filter = ('call__state',)
     list_display = ('name', 'start', 'end')
+    readonly_fields = ('maps_url',)
     actions = [make_all_approved, make_all_rejected]
 
 
