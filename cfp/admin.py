@@ -43,6 +43,13 @@ def make_approved(modeladmin, request, queryset):
 make_approved.short_description = "Mark selected calls as approved"
 
 
+def make_spam(modeladmin, request, queryset):
+    for call in queryset.all():
+        call.quarantine()
+        call.save()
+make_approved.short_description = "Mark selected calls as spam"
+
+
 def make_rejected(modeladmin, request, queryset):
     for call in queryset.all():
         call.reject()
@@ -53,5 +60,6 @@ make_rejected.short_description = "Mark selected calls as rejected"
 @admin.register(Call)
 class CallAdmin(admin.ModelAdmin):
     list_display = ('conference', 'start', 'end', 'state')
+    list_filter = ('state',)
     readonly_fields = ('state',)
-    actions = [make_approved, make_rejected]
+    actions = [make_approved, make_rejected, make_spam]

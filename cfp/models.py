@@ -77,6 +77,10 @@ class Call(models.Model):
     def days_left(self):
         return (self.end - datetime.utcnow().date()).days
 
+    @transition(field=state, source='new', target='spam')
+    def quarantine(self):
+        pass
+
     @transition(field=state, source='new', target='approved')
     def approve(self):
         pass

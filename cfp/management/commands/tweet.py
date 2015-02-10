@@ -17,7 +17,6 @@ class Command(BaseCommand):
         h = call.conference.twitter_hashtag
         l = "https://calltospeakers.com" + call.get_absolute_url()
         return [
-            "F" * 300,
             "{} call for speakers is now open {} @{} #{}".format(n, l, a, h),
             "{} call for speakers is now open {}".format(n, l),
             "{} call for speakers is now open {}".format(n[:85], l),
@@ -41,7 +40,9 @@ class Command(BaseCommand):
             self.stdout.write("skipping last tweet was less than 3 hours ago")
             return
 
-        call = Call.objects.filter(tweet_id=0, state='approved')[0]
+        call = Call.objects.filter(tweet_id=0, state='approved',
+                                   end__gte=datetime.utcnow()).\
+            order_by('-created')[0]
 
         for message in self.messages(call):
             try:
