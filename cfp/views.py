@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.syndication.views import Feed
 from django.core.urlresolvers import reverse
 from django.views.generic import DetailView
@@ -44,6 +45,13 @@ def legacy(r, year, slug):
                     permanent=True)
 
 
+class StaffRequiredMixin(object):
+
+    @classmethod
+    def as_view(cls):
+        return staff_member_required(super(StaffRequiredMixin, cls).as_view())
+
+
 class ConferenceCreate(CreateView):
     model = Conference
     fields = CONFERENCE_FIELDS
@@ -57,16 +65,12 @@ class ConferenceCreate(CreateView):
                        args=[self.object.slug, self.object.start.year])
 
 
-class ConferenceEdit(UpdateView):
+class ConferenceEdit(StaffRequiredMixin, UpdateView):
     model = Conference
     fields = CONFERENCE_FIELDS
 
-    def form_valid(self, form):
-        form.instance.slug = slugify(form.cleaned_data['name'])
-        return super(ConferenceEdit, self).form_valid(form)
-
     def get_success_url(self):
-        return reverse('conference_edit',
+        return reverse('call_read',
                        args=[self.object.slug, self.object.start.year])
 
 
@@ -85,7 +89,7 @@ class CallCreate(CreateView):
         return super(CallCreate, self).form_valid(form)
 
 
-class CallEdit(UpdateView):
+class CallEdit(StaffRequiredMixin, UpdateView):
     model = Call
     fields = CALL_FIELDS
 
