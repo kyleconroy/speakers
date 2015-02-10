@@ -73,6 +73,13 @@ class ConferenceEdit(StaffRequiredMixin, UpdateView):
         return reverse('call_read',
                        args=[self.object.slug, self.object.start.year])
 
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        queryset = queryset.filter(start__year=self.kwargs['year'],
+                                   slug=self.kwargs['slug'])
+        return queryset[0]
+
 
 class CallCreate(CreateView):
     model = Call
