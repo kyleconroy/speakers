@@ -12,7 +12,7 @@ class Conference(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     slug = models.CharField(max_length=100, db_index=True)
-    legacy_slug = models.CharField(max_length=100, db_index=True)
+    legacy_slug = models.CharField(max_length=100, db_index=True, blank=True)
     name = models.CharField(max_length=200)
 
     venue_name = models.CharField(max_length=100, blank=True)
