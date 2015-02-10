@@ -32,7 +32,7 @@ class Command(BaseCommand):
         auth.secure = True
         auth.set_access_token(access_token, access_token_secret)
 
-        api = tweepy.API(auth)
+        api = tweepy.API(auth, api_root='/1.1')
 
         last_tweet = api.user_timeline()[0]
 
@@ -46,7 +46,7 @@ class Command(BaseCommand):
 
         for message in self.messages(call):
             try:
-                tweet = api.update_status(message)
+                tweet = api.update_status(None, status=message)
             except tweepy.error.TweepError:
                 self.stdout.write("errored tweet={}".format(message))
                 continue

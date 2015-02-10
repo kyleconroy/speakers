@@ -64,7 +64,7 @@ class Call(models.Model):
     notify = models.DateField(blank=True)
     lanyrd_url = models.URLField(max_length=500, blank=True)
     application_url = models.URLField(max_length=1000, blank=True)
-    tweet_id = models.IntegerField(db_index=True, default=0)
+    tweet_id = models.BigIntegerField(db_index=True, default=0)
     state = FSMField(default='new', protected=True, db_index=True)
 
     def get_absolute_url(self):
