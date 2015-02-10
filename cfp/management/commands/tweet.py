@@ -41,6 +41,7 @@ class Command(BaseCommand):
             return
 
         call = Call.objects.filter(tweet_id=0, state='approved',
+                                   start__lte=datetime.utcnow(),
                                    end__gte=datetime.utcnow()).\
             order_by('-created')[0]
 

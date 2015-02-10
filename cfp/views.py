@@ -66,7 +66,7 @@ class ConferenceEdit(UpdateView):
         return super(ConferenceEdit, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse('confernce_edit',
+        return reverse('conference_edit',
                        args=[self.object.slug, self.object.start.year])
 
 
