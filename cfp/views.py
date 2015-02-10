@@ -78,7 +78,7 @@ class ConferenceEdit(StaffRequiredMixin, UpdateView):
             queryset = self.get_queryset()
         queryset = queryset.filter(start__year=self.kwargs['year'],
                                    slug=self.kwargs['slug'])
-        return queryset[0]
+        return queryset.get()
 
 
 class CallCreate(CreateView):
