@@ -104,6 +104,8 @@ class Production(Common):
 
     ALLOWED_HOSTS = [
         'speakers.herokuapp.com',
+        'calltospeakers.com',
+        'www.calltospeakers.com',
     ]
 
     # django-secure
