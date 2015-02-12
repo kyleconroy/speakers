@@ -41,6 +41,7 @@ class Common(Configuration):
         'django.contrib.messages',
         'django.contrib.staticfiles',
 
+        'social.apps.django_app.default',
         'markdown_deux',
         'bootstrap3',
         'cfp',
@@ -57,9 +58,23 @@ class Common(Configuration):
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
     )
 
+    TEMPLATE_CONTEXT_PROCESSORS = (
+        'django.contrib.auth.context_processors.auth',
+        'django.core.context_processors.debug',
+        'django.core.context_processors.i18n',
+        'django.core.context_processors.media',
+        'django.core.context_processors.static',
+        'django.core.context_processors.tz',
+        'django.contrib.messages.context_processors.messages',
+        'social.apps.django_app.context_processors.backends',
+        'social.apps.django_app.context_processors.login_redirect',
+    )
+
     ROOT_URLCONF = 'calltospeakers.urls'
 
     WSGI_APPLICATION = 'calltospeakers.wsgi.application'
+
+    LOGIN_REDIRECT_URL = '/'
 
     # Internationalization
     # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -76,6 +91,19 @@ class Common(Configuration):
 
     DATABASES = values.DatabaseURLValue(
         'sqlite:///{}'.format(os.path.join(BASE_DIR, 'db.sqlite3'))
+    )
+
+    SOCIAL_AUTH_GITHUB_KEY = values.Value()
+    SOCIAL_AUTH_GITHUB_SECRET = values.Value()
+    SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
+
+    SOCIAL_AUTH_TWITTER_KEY = values.Value()
+    SOCIAL_AUTH_TWITTER_SECRET = values.Value()
+
+    AUTHENTICATION_BACKENDS = (
+        #'social.backends.twitter.TwitterOAuth',
+        'social.backends.github.GithubOAuth2',
+        'django.contrib.auth.backends.ModelBackend',
     )
 
 

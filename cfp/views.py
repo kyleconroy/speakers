@@ -1,17 +1,19 @@
 from datetime import datetime, timedelta
 
+from django.contrib.auth import authenticate, login
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.syndication.views import Feed
 from django.core.urlresolvers import reverse
 from django.views.generic import DetailView
 from django.views.generic import ListView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, FormView, UpdateView
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.utils.text import slugify
 
 from cfp.models import Call
 from cfp.models import Conference
+from cfp.forms import UserCreationForm, AuthenticationForm
 
 CONFERENCE_FIELDS = (
     'name',
@@ -157,3 +159,26 @@ class LatestCallsFeed(Feed):
 
     def item_pubdate(self, item):
         return item.created
+
+
+class SignupView(FormView):
+    template_name = 'registration/signup.html'
+    form_class = UserCreationForm
+    success_url = '/'
+
+    def form_valid(self, form):
+        u = form.save()
+        user = authenticate(username=u.username,
+                            password=form.cleaned_data['password1'])
+        login(self.request, user)
+        return super(SignupView, self).form_valid(form)
+
+
+class LoginView(FormView):
+    template_name = 'registration/login.html'
+    form_class = AuthenticationForm
+    success_url = '/'
+
+    def form_valid(self, form):
+        login(self.request, form.user_cache)
+        return super(LoginView, self).form_valid(form)

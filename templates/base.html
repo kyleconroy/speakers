@@ -26,26 +26,33 @@
     <meta name="msapplication-config" content="/static/icons/browserconfig.xml">
 
     <link rel="alternate" type="application/rss+xml" title="Call to Speakers RSS Feed" href="https://calltospeakers.com/feed">
-    <link rel="stylesheet" href="{% static "css/pure-min.css" %}">
-    <link rel="stylesheet" href="{% static "css/grids-responsive-min.css" %}">
-    <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}">
     <link rel="stylesheet" href="{% static "css/style.css" %}">
   </head>
   <body>
-    <div id="header-container">
-      <div class="container">
-        <header>
-          <a class="site-title" href="/"><img src="/static/img/logo-md.png"> <span>Call to Speakers<span></a>
-          <a id="submitcfp" class="pure-button button-success" href="/conferences/new"><i class="fa fa-plus-square"></i> Submit a CFP</a>
+    <div id="wrapper">
+        <header id="nav">
+          <a class="site-title" href="/">
+            <img src="/static/img/logo-md.png"><span>Call to Speakers<span>
+          </a>
+          <ul>
+          {% if user.is_authenticated %}
+          <li>{{ user.email }}</li>
+          <li><a class="btn" href="{% url 'logout' %}">
+              Log out
+          </a></li>
+          {% else %}
+          <li><a class="btn" href="{% url 'login' %}">Log in</a></li>
+          <li><a class="btn" href="{% url 'signup' %}">Sign up</a></li>
+          {% endif %}
+          </ul>
         </header>
-      </div>
-    </div>
-    <div class="container">
-      <div>
+      <div id="content">
         {% block content %}{% endblock %}
       </div>
       <footer>
         <p>Send questions and comments to <a href="mailto:contact@calltospeakers.com">contact@calltospeakers.com</a></p>
+        <a class="twitter" href="https://twitter.com/calltospeakers">Twitter</a>
+        <a class="rss" href="/feed">RSS</a>
       </footer>
     </div>
     <script src="https://www.google-analytics.com/analytics.js" async></script>
