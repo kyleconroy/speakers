@@ -428,22 +428,49 @@ th {
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 
 /* SITE WIDE */
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
 .btn {
   text-decoration: none;
   display: block;
-  border: 1px solid #000;
+  border: 1px solid #bbb;
+  border-bottom: 2px solid #bbb;
+  border-radius: 3px;
   padding: 10px;
+  text-align: center;
+  color: #222;
 }
 
-.form {
-  display: flex;
-  flex-direction: column;
+.btn:hover {
+  background: #eee;
 }
 
-.form > p {
-  display: flex;
-  justify-content: space-between;
+.btn-primary {
+  border: 1px solid #15b141;
+  border-bottom: 2px solid #15b141;
+  color: #222;
+  background: #6bfa93;
 }
+
+.btn-primary:hover {
+  background: #65dd86;
+}
+
+.slim {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.form > p > label, .form > p > input {
+  display: block;
+}
+
+.form > p > input, .form > p > textarea {
+  width: 100%;
+}
+
 
 /* BASE */
 
@@ -453,8 +480,12 @@ th {
   padding: 0 10px;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
+#content {
+  flex: 1;
+}
 
 #nav {
   display: flex;
@@ -494,6 +525,23 @@ th {
   margin-left: 10px;
 }
 
+#wrapper > footer {
+  background: #eee;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+#wrapper > footer p {
+  padding: 5px;
+  text-align: center;
+}
+#wrapper > footer a {
+  color: #666;
+}
+
 
 /* HOME PAGE */
 
@@ -503,7 +551,8 @@ th {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  background: #ccc;
+  border-radius: 3px;
+  border: 1px solid #ccc;
 }
 
 .table-list {
@@ -548,4 +597,75 @@ th {
 
 #login .btn {
   margin-bottom: 5px;
+}
+
+.separator {
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+  height: 10px;
+}
+
+
+#login > .form {
+  display: flex;
+  flex-direction: column;
+}
+
+#login > .form > p {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+/* CONFERENCE */
+#call-detail {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#call-info {
+  flex: 1;
+}
+
+#call-text {
+  flex: 2;
+}
+
+#call-close-notification {
+  margin: 10px 0;
+  background: #cef1fa;
+  text-align: center;
+  border-radius: 5px;
+  border: 1px solid #78d3ea;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar {
+  background-image: url('../img/calendar.png');
+  background-repeat: no-repeat;
+  background-size: 70px 249px;
+  text-align: center;
+  width: 70px;
+  font-size: 30px;
+  height: 50px;
+  padding: 30px 0 0 0;
+  margin: 0 10px;
+  overflow: hidden;
+}
+
+.calendar-text {
+  font-size: 24px;
+}
+
+.calendar-days {
+  background-position: 0 -85px;
+}
+
+.calendar-closed {
+  background-position: 0 -170px;
 }

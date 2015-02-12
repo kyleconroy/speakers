@@ -3,7 +3,7 @@
 {% load bootstrap3 %}
 
 {% block content %}
-
+<div class="slim">
 {% if form.instance.pk %}
   <h1>Edit existing CFP</h1>
 {% else %}
@@ -21,4 +21,5 @@
         </button>
     {% endbuttons %}
 </form>
+</div>
 {% endblock %}

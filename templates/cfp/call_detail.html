@@ -2,168 +2,72 @@
 
 {% load markdown_deux_tags %}
 
-{% block title %} {{call.conference.name}} {{call.conference.start.year}}{% endblock %}
+{% block title %}{{call.conference.name}} {{call.conference.start.year}}{% endblock %}
 
 
 {% block content %}
 {% with conf=call.conference %}
-<div class="pure-g">
-  <div class="pure-u-1-1 pure-u-md-2-5">
-    <div class="conference-box">
-      <a class="conference-title" href="{{ call.get_absolute_url }}"><h1>{{ conf.name }}</h1></a>
-      <p class="conference-tagline">{{ conf.tagline }}</p>
-
-      <div class="pure-g">
-        <div class="pure-u-1-1 pure-u-sm-1-2 pure-u-md-1-1">
-          <div>
-            <span class="conference-detail fa-holder">
-              <i class="fa fa-calendar-o"></i></span> {{ conf.date_range }}
-          </div>
-          {% if conf.venue %}
-          <div>
-            <span class="conference-detail fa-holder">
-              <i class="fa fa-university"></i></span> {{ conf.venue }}
-          </div>
-          {% endif %}
-          <div>
-            <span class="conference-detail fa-holder">
-              <i class="fa fa-map-marker"></i></span>
-            {{conf.city}}, {{ conf.country.name }}</div>
-          </br>
-        </div>
-
-        <div class="pure-u-1-1 pure-u-sm-1-2 pure-u-md-1-1">
-          {% if conf.website_url %}
-          <div class="conference-detail">
-            <a href="{{ conf.website_url }}">
-              <i class="fa fa-link"></i> {{ conf.website_domain }}
-            </a>
-          </div>
-          {% endif %}
-
-          {% if conf.twitter_handle %}
-          <div class="conference-detail">
-            <a href="https://twitter.com/{{ conf.twitter_url }}">
-              <i class="fa fa-twitter"></i> @{{ conf.twitter_handle }}
-            </a>
-          </div>
-          {% endif %}
-        </div>
-      </div>
-
+<div id="call-detail">
+  <div id="call-info">
+    <a class="conference-title" href="{{ call.get_absolute_url }}"><h1>{{ conf.name }}</h1></a>
+    <p class="conference-tagline">{{ conf.tagline }}</p>
+    <div>
+      <span class="conference-detail fa-holder">
+        <i class="fa fa-calendar-o"></i></span> {{ conf.date_range }}
     </div>
-  </div>
 
-  <div class="pure-u-1-1 pure-u-md-3-5">
-    <div class="conference-box">
-
-      <div id="call-close-notification">
-        {% if call.is_open %}
-          {% if call.days_left == 1 %}
-          <div class="calendar calendar-day">
-          {% else %}
-          <div class="calendar calendar-days">
-          {% endif %}
-            {{ call.days_left }}
-          </div>
-          <div class="calendar-text">
-            <span>Applications due by</span> <span>{{ call.end|date:"M j, Y" }}</span>
-          </div>
-          {% else %}
-          <div class="calendar calendar-closed"></div>
-          <div class="calendar-text"><span>Applications were due by</span> <span>{{ call.end|date:"M j, Y" }}</span>
-          {% endif %}
-        </div>
-
-        {% if call.has_form %}
-        <form class="pure-form talk-form pure-g">
-
-          <div class="pure-u-1-1"><h3><i class="fa fa-angle-right"></i> Talk Information</h3></div>
-
-          <div class="pure-u-1-1 pure-u-sm-1-4">
-            <label for="name">Title <span class="required">*</span></label>
-          </div>
-          <div class="pure-u-1-1 pure-u-sm-3-4">
-            <input class="pure-input-1" id="name" type="text" placeholder="Title for your talk" required>
-          </div>
-
-          <div class="pure-u-1-1 pure-u-sm-1-4">
-            <label for="abstract">Abstract <span class="required">*</span></label>
-          </div>
-          <div class="pure-u-1-1 pure-u-sm-3-4">
-            <textarea required class="pure-input-1" id="abstract" placeholder="Description for your talk"></textarea>
-          </div>
-
-          <div class="pure-u-1-1 pure-u-sm-1-4">
-            <label for="notes">Notes / Questions</label>
-          </div>
-          <div class="pure-u-1-1 pure-u-sm-3-4">
-            <textarea class="pure-input-1" id="notes" placeholder="Additional notes or questions for the organizers"></textarea>
-          </div>
-
-          <div class="pure-u-1-1"><h3><i class="fa fa-angle-right"></i> Profile Information</h3></div>
-
-          <div class="pure-u-1-1 pure-u-sm-1-4">
-            <label for="name">Full Name <span class="required">*</span></label>
-          </div>
-          <div class="pure-u-1-1 pure-u-sm-3-4">
-            <input class="pure-input-1" id="name" type="text" placeholder="Full name" required>
-          </div>
-
-          <div class="pure-u-1-1 pure-u-sm-1-4">
-            <label for="email">Email Address <span class="required">*</span></label>
-          </div>
-          <div class="pure-u-1-1 pure-u-sm-3-4">
-            <input class="pure-input-1" id="email" type="email" placeholder="foo@example.com" required>
-          </div>
-
-          <div class="pure-u-1-1 pure-u-sm-1-4">
-            <label for="bio">Bio <span class="required">*</span></label>
-          </div>
-          <div class="pure-u-1-1 pure-u-sm-3-4">
-            <textarea required class="pure-input-1" id="bio" placeholder="Tell us a bit about yourself"></textarea>
-          </div>
-
-          <div class="pure-u-1-1 pure-u-sm-1-4">
-            <label for="location">Location</label>
-          </div>
-          <div class="pure-u-1-1 pure-u-sm-3-4">
-            <input class="pure-input-1" id="location" type="text" placeholder="City and country">
-          </div>
-
-          <div class="pure-u-1-1 pure-u-sm-1-4">
-            <label for="website">Website</label>
-          </div>
-          <div class="pure-u-1-1 pure-u-sm-3-4">
-            <input class="pure-input-1" id="website" type="text" placeholder="https://example.com">
-          </div>
-
-          <div class="pure-u-1-1 pure-u-sm-1-4">
-            <label for="twitter">Twitter</label>
-          </div>
-          <div class="pure-u-1-1 pure-u-sm-3-4">
-            <input class="pure-input-1" id="twitter" type="text" placeholder="Twitter username">
-          </div>
-
-          <div class="pure-u-1-1 pure-u-sm-1-4">
-            <label for="github">GitHub</label>
-          </div>
-          <div class="pure-u-1-1 pure-u-sm-3-4">
-            <input class="pure-input-1" id="github" type="text" placeholder="GitHub username">
-          </div>
-
-          <div class="pure-u-1-1 pure-controls">
-            <button type="submit" class="pure-button pure-button-primary">Submit Talk</button>
-          </div>
-        </form>
-        {% else %}
-        <a href="{{ call.application_url }}" class="pure-button pure-button-primary">Submit a talk today!</a>
-        <article class="post-content">
-          {{ call.description|markdown }}
-        </article>
-        {% endif %}
-      </div>
+    {% if conf.venue %}
+    <div>
+      <span class="conference-detail fa-holder">
+        <i class="fa fa-university"></i></span> {{ conf.venue }}
     </div>
+    {% endif %}
+
+    <div>
+      <span class="conference-detail fa-holder">
+        <i class="fa fa-map-marker"></i></span>
+      {{conf.city}}, {{ conf.country.name }}
+    </div>
+    </br>
+
+    {% if conf.website_url %}
+    <div class="conference-detail">
+      <a href="{{ conf.website_url }}">
+        <i class="fa fa-link"></i> {{ conf.website_domain }}
+      </a>
+    </div>
+    {% endif %}
+
+    {% if conf.twitter_handle %}
+    <div class="conference-detail">
+      <a href="https://twitter.com/{{ conf.twitter_url }}">
+        <i class="fa fa-twitter"></i> @{{ conf.twitter_handle }}
+      </a>
+    </div>
+    {% endif %}
   </div>
-  {% endwith %}
-  {% endblock %}
+  <div id="call-text">
+    <div id="call-close-notification">
+      {% if call.is_open %}
+      <div class="calendar calendar-day{% if call.days_left > 1 %}s{% endif %}">
+        {{ call.days_left }}
+      </div>
+      <div class="calendar-text">
+        <span>Applications due by</span> <span>{{ call.end|date:"M j, Y" }}</span>
+      </div>
+      {% else %}
+      <div class="calendar calendar-closed"></div>
+      <div class="calendar-text">
+        <span>Applications were due by</span> <span>{{ call.end|date:"M j, Y" }}</span>
+      </div>
+      {% endif %}
+    </div>
+    <a href="{{ call.application_url }}" class="btn">
+      Submit a talk today!</a>
+    <article class="post-content">
+      {{ call.description|markdown }}
+    </article>
+  </div>
+</div>
+{% endwith %}
+{% endblock %}
