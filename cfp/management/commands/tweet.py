@@ -16,11 +16,15 @@ class Command(BaseCommand):
         a = call.conference.twitter_handle
         h = call.conference.twitter_hashtag
         l = "https://calltospeakers.com" + call.get_absolute_url()
-        return [
-            "{} call for speakers is now open {} @{} #{}".format(n, l, a, h),
-            "{} call for speakers is now open {}".format(n, l),
-            "{} call for speakers is now open {}".format(n[:85], l),
-        ]
+
+        if h and a:
+            yield "{} call for speakers is now open {} @{} #{}".format(n, l, a, h)
+
+        if a:
+            yield "{} call for speakers is now open {} @{}".format(n, l, a)
+
+        yield "{} call for speakers is now open {}".format(n, l)
+        yield "{} call for speakers is now open {}".format(n[:85], l)
 
     def handle(self, *args, **options):
         consumer_key = os.environ['TWITTER_CONSUMER_KEY']
