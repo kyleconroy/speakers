@@ -13,7 +13,7 @@ from django.utils.text import slugify
 
 from cfp.models import Call
 from cfp.models import Conference
-from cfp.forms import UserCreationForm, AuthenticationForm
+from cfp.forms import UserCreationForm, AuthenticationForm, parse_handle
 
 CONFERENCE_FIELDS = (
     'name',
@@ -60,6 +60,10 @@ class ConferenceCreate(CreateView):
 
     def form_valid(self, form):
         form.instance.slug = slugify(form.cleaned_data['name'])
+        form.instance.twitter_hashtag = \
+            form.cleaned_data['twitter_hashtag'].replace("#", "")
+        form.instance.twitter_handle = \
+            parse_handle(form.cleaned_data['twitter_handle'])
         return super(ConferenceCreate, self).form_valid(form)
 
     def get_success_url(self):
