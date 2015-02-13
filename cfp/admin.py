@@ -32,7 +32,7 @@ class ConferenceAdmin(admin.ModelAdmin):
         CallInline,
     ]
     list_filter = ('call__state', 'created')
-    list_display = ('name', 'start', 'end')
+    list_display = ('name', 'start', 'end', 'created')
     readonly_fields = ('maps_url',)
     actions = [make_all_approved, make_all_rejected]
 
@@ -60,7 +60,7 @@ make_rejected.short_description = "Mark selected calls as rejected"
 
 @admin.register(Call)
 class CallAdmin(admin.ModelAdmin):
-    list_display = ('conference', 'start', 'end', 'state')
+    list_display = ('conference', 'start', 'end', 'created', 'state')
     list_filter = ('state', 'created')
     readonly_fields = ('state',)
     actions = [make_approved, make_rejected, make_spam]
