@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from cfp.models import Call
-from cfp.models import Conference
+from cfp.models import Call, Conference, Track, Profile, Talk
 
 
 class CallInline(admin.StackedInline):
@@ -64,3 +63,19 @@ class CallAdmin(admin.ModelAdmin):
     list_filter = ('state', 'created')
     readonly_fields = ('state',)
     actions = [make_approved, make_rejected, make_spam]
+
+
+@admin.register(Talk)
+class TalkAdmin(admin.ModelAdmin):
+    readonly_fields = ('call',)
+
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Track)
+class TrackAdmin(admin.ModelAdmin):
+    pass
+
+

@@ -43,7 +43,6 @@ class Common(Configuration):
 
         'social.apps.django_app.default',
         'markdown_deux',
-        'bootstrap3',
         'cfp',
     )
 

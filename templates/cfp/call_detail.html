@@ -45,6 +45,10 @@
       </a>
     </div>
     {% endif %}
+
+    <article class="post-content">
+      {{ call.description|markdown }}
+    </article>
   </div>
   <div id="call-text">
     <div id="call-close-notification">
@@ -67,12 +71,17 @@
         <span>Applications were due by</span> <span>{{ call.end|date:"M j, Y" }}</span>
       </div>
       {% endif %}
+      </div>
+      <form action="{% url 'talk_create' conf.slug conf.start.year %}" method="post" class="form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Submit a talk</button>
+        {% if user.is_authenticated %}
+        {% else %}
+        <p>Since you're not logged in, you'll need to enter additional profile information</p>
+        {% endif %}
+      </form>
     </div>
-    <a href="{{ call.application_url }}" class="btn">
-      Submit a talk today!</a>
-    <article class="post-content">
-      {{ call.description|markdown }}
-    </article>
   </div>
 </div>
 {% endwith %}

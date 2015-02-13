@@ -467,7 +467,9 @@ body {
   display: block;
 }
 
-.form > p > input, .form > p > textarea {
+.form > p > input, 
+.form > p > select,
+.form > p > textarea {
   width: 100%;
 }
 
@@ -652,11 +654,13 @@ body {
 
 #call-info {
   flex: 1;
-  min-width: 200px;
+  min-width: 300px;
+  padding: 0 10px;
 }
 
 #call-text {
-  flex: 2;
+  flex: 1;
+  padding: 0 10px;
   min-width: 300px;
 }
 

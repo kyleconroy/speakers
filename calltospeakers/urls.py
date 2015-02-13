@@ -63,6 +63,10 @@ urlpatterns = [
         views.CallCreate.as_view(),
         name='call_create'),
     url(
+        r'^(?P<slug>[\w-]+)/(?P<year>\d+)/talk$',
+        views.TalkCreate.as_view(),
+        name='talk_create'),
+    url(
         r'^(?P<slug>[\w-]+)/(?P<year>\d+)/call/edit$',
         views.CallEdit.as_view(),
         name='call_edit'),

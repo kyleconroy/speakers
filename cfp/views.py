@@ -11,9 +11,8 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.utils.text import slugify
 
-from cfp.models import Call
-from cfp.models import Conference
-from cfp.forms import UserCreationForm, AuthenticationForm
+from cfp.models import Call, Conference, Track, Talk, Profile
+from cfp.forms import UserCreationForm, AuthenticationForm, TalkForm
 
 CONFERENCE_FIELDS = (
     'name',
@@ -75,12 +74,11 @@ class ConferenceEdit(StaffRequiredMixin, UpdateView):
         return reverse('call_read',
                        args=[self.object.slug, self.object.start.year])
 
-    def get_object(self, queryset=None):
-        if queryset is None:
-            queryset = self.get_queryset()
-        queryset = queryset.filter(start__year=self.kwargs['year'],
-                                   slug=self.kwargs['slug'])
-        return queryset.get()
+    def get_object(self, qs=None):
+        if qs is None:
+            qs = self.get_queryset()
+        return get_object_or_404(qs, start__year=self.kwargs['year'],
+                                     slug=self.kwargs['slug'])
 
 
 class CallCreate(CreateView):
@@ -108,23 +106,72 @@ class CallEdit(StaffRequiredMixin, UpdateView):
         return super(CallEdit, self).form_valid(form)
 
     def get_object(self, queryset=None):
-        if queryset is None:
-            queryset = self.get_queryset()
-        queryset = queryset.filter(conference__start__year=self.kwargs['year'],
-                                   conference__slug=self.kwargs['slug'])
-        return queryset[0]
+        if qs is None:
+            qs = self.get_queryset()
+        return get_object_or_404(qs, conference__start__year=self.kwargs['year'],
+                                     conference__slug=self.kwargs['slug'])
 
 
 class CallDetail(DetailView):
     model = Call
     context_object_name = 'call'
 
-    def get_object(self, queryset=None):
-        if queryset is None:
-            queryset = self.get_queryset()
-        queryset = queryset.filter(conference__start__year=self.kwargs['year'],
-                                   conference__slug=self.kwargs['slug'])
-        return queryset[0]
+    def get_context_data(self, **kwargs):
+        context = super(CallDetail, self).get_context_data(**kwargs)
+
+        qs = Track.objects.filter(conference=self.object.conference.id)
+
+        form = TalkForm()
+        form.fields['track'].queryset = qs
+
+        if qs.count() == 0:
+            del form.fields['track']
+
+        if not self.object.needs_audience:
+            del form.fields['audience']
+
+        if self.request.user.is_authenticated():
+            del form.fields['email_address']
+            del form.fields['first_name']
+            del form.fields['last_name']
+
+        context['form'] = form
+        return context
+
+    def get_object(self, qs=None):
+        if qs is None:
+            qs = self.get_queryset()
+        return get_object_or_404(qs, conference__start__year=self.kwargs['year'],
+                                     conference__slug=self.kwargs['slug'])
+
+
+class TalkCreate(FormView):
+    template_name = 'cfp/talk_form.html'
+    form_class = TalkForm
+    success_url = '/'
+
+    def form_valid(self, form):
+        call = get_object_or_404(Call, conference__start__year=self.kwargs['year'],
+                                       conference__slug=self.kwargs['slug'])
+
+        if self.request.user.is_authenticated():
+            profile = Profile.objects.get_or_create(user=self.request.user)
+        else:
+            profile = Profile()
+            profile.user = self.request.user
+            profile.first_name = form.cleaned_data['first_name']
+            profile.last_name = form.cleaned_data['last_name']
+            profile.email_address = form.cleaned_data['email_address']
+            profile.save()
+
+        form.instance.call = call
+        form.instance.profile = profile
+
+        if not form.instance.audience:
+            form.instance.audience = 1
+
+        form.save()
+        return super(TalkCreate, self).form_valid(form)
 
 
 class CallList(ListView):
