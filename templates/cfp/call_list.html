@@ -2,7 +2,7 @@
 
 {% block content %}
 <div id="new-cfp-callout">
-  <span>Are we missing your favorite conference? Help up out and add it to our list!</span>
+  <span>Are we missing your favorite conference? Help us out and add it to our list!</span>
   <a class="btn" href="{% url "conference_create" %}">Submit a call for speakers</a>
 </div>
 
@@ -19,7 +19,11 @@
   <li>
     <div class="table-list-cell call-days">
       {% with total=business.employees.count %}
+        {% if c.days_left == 0 %}
+        Today
+        {% else %}
         {{ c.days_left }}<br>day{{ c.days_left|pluralize }}
+        {% endif %}
       {% endwith %}
     </div>
     <div class="table-list-cell">

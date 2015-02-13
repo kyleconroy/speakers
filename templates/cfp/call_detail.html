@@ -49,12 +49,18 @@
   <div id="call-text">
     <div id="call-close-notification">
       {% if call.is_open %}
-      <div class="calendar calendar-day{% if call.days_left > 1 %}s{% endif %}">
-        {{ call.days_left }}
-      </div>
-      <div class="calendar-text">
-        <span>Applications due by</span> <span>{{ call.end|date:"M j, Y" }}</span>
-      </div>
+        {% if call.days_left == 0 %}
+        <div class="calendar-text">
+          <span>Applications due by the end of the day</span>
+        </div>
+        {% else %}
+        <div class="calendar calendar-day{% if call.days_left > 1 %}s{% endif %}">
+          {{ call.days_left }}
+        </div>
+        <div class="calendar-text">
+          <span>Applications due by</span> <span>{{ call.end|date:"M j, Y" }}</span>
+        </div>
+        {% endif %}
       {% else %}
       <div class="calendar calendar-closed"></div>
       <div class="calendar-text">
