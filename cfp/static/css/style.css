@@ -472,6 +472,18 @@ body {
 }
 
 
+.form-inline {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-inline > p {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+
 /* BASE */
 
 #wrapper {
@@ -532,6 +544,7 @@ body {
   align-items: center;
   justify-content: space-around;
   flex-wrap: wrap;
+  margin-top: 10px;
 }
 
 #wrapper > footer p {
@@ -556,33 +569,57 @@ body {
 }
 
 .table-list {
-  display: table;
   margin: 0;
   padding: 0;
   list-style-type: none;
 }
-
 .table-list li {
-  display: table-row;
-  padding: 0;
+  padding: 10px;
 }
 
-.table-list-cell {
-  display: table-cell;
-  vertical-align: middle;
-  padding: 10px;
+.table-list-header {
+  display: none;
+}
+
+.call-days {
+  display: none;
+}
+
+.call-link {
+  font-size: 16px;
+  font-weight: 500;
+}
+  
+@media screen and (min-width: 568px) {
+  .table-list-header {
+    display: table-row;
+  }
+ 
+  .table-list {
+    display: table;
+  }
+  
+  .table-list li {
+    display: table-row;
+    padding: 0;
+  }
+  
+  .table-list-cell {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 10px;
+  }
+
+  .call-date, .call-country {
+    min-width: 120px;
+  }
+  .call-city, .call-days, .call-date {
+    text-align: right;
+  }
 }
 
 #conferences {
   font-size: 14px;
-}
-
-.call-city, .call-days, .call-date {
-  text-align: right;
-}
-
-.call-date, .call-country {
-  min-width: 120px;
 }
 
 .call-tagline {
@@ -607,18 +644,6 @@ body {
   height: 10px;
 }
 
-
-#login > .form {
-  display: flex;
-  flex-direction: column;
-}
-
-#login > .form > p {
-  display: flex;
-  justify-content: space-between;
-}
-
-
 /* CONFERENCE */
 #call-detail {
   display: flex;
@@ -627,10 +652,12 @@ body {
 
 #call-info {
   flex: 1;
+  min-width: 200px;
 }
 
 #call-text {
   flex: 2;
+  min-width: 300px;
 }
 
 #call-close-notification {

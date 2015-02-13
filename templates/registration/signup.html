@@ -2,7 +2,7 @@
 
 {% block content %}
 <div id="login">
-<form action="" method="post" class="form">
+<form action="" method="post" class="form-inline">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">Sign up</button>
