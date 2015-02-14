@@ -135,6 +135,20 @@ class Profile(models.Model):
     organization = models.CharField(max_length=100, blank=True)
     job_title = models.CharField(max_length=50, blank=True)
 
+    @classmethod
+    def generate(cls, user):
+        try:
+            profile = cls.objects.get(owner=user)
+        except cls.DoesNotExist:
+            profile = cls(owner=user)
+        if not profile.first_name:
+            profile.first_name = user.first_name
+        if not profile.last_name:
+            profile.last_name = user.last_name
+        if not profile.email_address:
+            profile.email_address = user.email
+        return profile
+
     def __str__(self):
         return self.email_address
 

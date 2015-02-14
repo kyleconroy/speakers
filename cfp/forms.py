@@ -62,6 +62,12 @@ class AuthenticationForm(forms.Form):
 
 
 class TalkForm(forms.ModelForm):
+    class Meta:
+        model = Talk
+        fields = ('title', 'abstract', 'track', 'audience')
+
+
+class AnonymousTalkForm(forms.ModelForm):
     first_name = forms.CharField(max_length=300)
     last_name = forms.CharField(max_length=300)
     email_address = forms.EmailField(max_length=254)

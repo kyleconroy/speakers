@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from django.db import transaction
 from django.contrib.auth import authenticate, login
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.syndication.views import Feed
@@ -12,7 +13,8 @@ from django.shortcuts import redirect
 from django.utils.text import slugify
 
 from cfp.models import Call, Conference, Track, Talk, Profile
-from cfp.forms import UserCreationForm, AuthenticationForm, TalkForm
+from cfp.forms import UserCreationForm, AuthenticationForm
+from cfp.forms import AnonymousTalkForm, TalkForm
 
 CONFERENCE_FIELDS = (
     'name',
@@ -119,9 +121,21 @@ class CallDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(CallDetail, self).get_context_data(**kwargs)
 
+        if self.request.user.is_authenticated():
+            try:
+                context['talk'] = Talk.objects.get(call=self.object,
+                                                   profile__owner=self.request.user)
+                return context
+            except Talk.DoesNotExist:
+                pass
+
         qs = Track.objects.filter(conference=self.object.conference.id)
 
-        form = TalkForm()
+        if self.request.user.is_authenticated():
+            form = TalkForm()
+        else:
+            form = AnonymousTalkForm()
+
         form.fields['track'].queryset = qs
 
         if qs.count() == 0:
@@ -129,11 +143,6 @@ class CallDetail(DetailView):
 
         if not self.object.needs_audience:
             del form.fields['audience']
-
-        if self.request.user.is_authenticated():
-            del form.fields['email_address']
-            del form.fields['first_name']
-            del form.fields['last_name']
 
         context['form'] = form
         return context
@@ -147,30 +156,39 @@ class CallDetail(DetailView):
 
 class TalkCreate(FormView):
     template_name = 'cfp/talk_form.html'
-    form_class = TalkForm
-    success_url = '/'
+
+    def get_form_class(self):
+        if self.request.user.is_authenticated():
+            return TalkForm
+        else:
+            return AnonymousTalkForm
+
+    def get_success_url(self):
+        call = get_object_or_404(Call, conference__start__year=self.kwargs['year'],
+                                       conference__slug=self.kwargs['slug'])
+        return call.get_absolute_url()
 
     def form_valid(self, form):
         call = get_object_or_404(Call, conference__start__year=self.kwargs['year'],
                                        conference__slug=self.kwargs['slug'])
 
         if self.request.user.is_authenticated():
-            profile = Profile.objects.get_or_create(user=self.request.user)
+            profile = Profile.generate(self.request.user)
         else:
             profile = Profile()
-            profile.user = self.request.user
             profile.first_name = form.cleaned_data['first_name']
             profile.last_name = form.cleaned_data['last_name']
             profile.email_address = form.cleaned_data['email_address']
-            profile.save()
-
-        form.instance.call = call
-        form.instance.profile = profile
 
         if not form.instance.audience:
             form.instance.audience = 1
 
-        form.save()
+        with transaction.atomic():
+            profile.save()
+            form.instance.call = call
+            form.instance.profile = profile
+            form.save()
+
         return super(TalkCreate, self).form_valid(form)
 
 
