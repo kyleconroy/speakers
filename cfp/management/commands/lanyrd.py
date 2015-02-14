@@ -160,7 +160,7 @@ class Command(BaseCommand):
                 call.notify = parse_date(day)
 
         if call.start is None:
-            call.start = call.end - datetime.timedelta(days=30)
+            call.start = datetime.date.today()
 
         if call.notify is None:
             call.notify = call.end + datetime.timedelta(days=7)
