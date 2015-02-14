@@ -9,6 +9,10 @@ class CallInline(admin.StackedInline):
     readonly_fields = ('state',)
 
 
+class TrackInline(admin.StackedInline):
+    model = Track
+
+
 def make_all_approved(modeladmin, request, queryset):
     for conf in queryset.all():
         for call in conf.call_set.all():
@@ -29,6 +33,7 @@ make_all_rejected.short_description = "Mark selected calls as rejected"
 class ConferenceAdmin(admin.ModelAdmin):
     inlines = [
         CallInline,
+        TrackInline,
     ]
     list_filter = ('call__state', 'created')
     list_display = ('name', 'start', 'end', 'created')
