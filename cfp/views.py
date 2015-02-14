@@ -16,7 +16,7 @@ from django.shortcuts import redirect, render
 from django.utils.text import slugify
 from django.http import HttpResponseRedirect
 
-from cfp.models import Call, Conference, Track, Talk, Profile
+from cfp.models import Call, Conference, Track, Talk, Profile, token
 from cfp.forms import UserCreationForm, AuthenticationForm, parse_handle
 from cfp.forms import TalkForm, ProfileForm
 
@@ -151,6 +151,7 @@ def call_detail_and_form(request, slug, year):
             with transaction.atomic():
                 profile = Profile.generate(request.user)
                 profile.save()
+                form.instance.token = token(15)
                 form.instance.call = call
                 form.instance.profile = profile
                 form.save()

@@ -74,7 +74,6 @@ class CallAdmin(admin.ModelAdmin):
 class TalkAdmin(admin.ModelAdmin):
     readonly_fields = ('call',)
 
-
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     pass

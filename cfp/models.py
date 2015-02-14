@@ -1,4 +1,6 @@
+import string
 from datetime import datetime
+import random
 import urllib.parse
 
 from django.db import models
@@ -7,6 +9,11 @@ from django.contrib.auth.models import User
 
 from django_countries.fields import CountryField
 from django_fsm import FSMField, transition
+
+
+def token(size):
+    c = string.ascii_uppercase + string.digits
+    return ''.join(random.SystemRandom().choice(c) for _ in range(size))
 
 
 class Conference(models.Model):
@@ -110,6 +117,7 @@ LEVELS = ((1, 'Beginner'), (2, 'Intermidiate'), (3, 'Advancded'))
 
 
 class Talk(models.Model):
+    token = models.CharField(max_length=15)
     title = models.CharField(max_length=300)
     track = models.ForeignKey('Track', null=True, blank=True)
     call = models.ForeignKey('Call')
