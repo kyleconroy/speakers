@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Your Profile{% endblock %}
+
+{% block content %}
+<div class="slim">
+  <h2>Your Speaker Profile</h2>
+  <form action="" method="post" class="form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Update your profile</button>
+  </form>
+</div>
+{% endblock %}

@@ -3,16 +3,16 @@
 {% block content %}
 <div class="slim">
 {% if form.instance.pk %}
-  <h1>Edit existing CFP</h1>
+  <h1>Edit existing talk</h1>
 {% else %}
-  <h1>Add a new CFP</h1>
+  <h1>Add a new talk</h1>
 {% endif %}
 
 <form action="" method="post" class="form">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">
-      {% if form.instance.pk %}Edit CFP{% else %}Create CFP{% endif %}
+      {% if form.instance.pk %}Edit talk{% else %}Create talk{% endif %}
     </button>
 </form>
 </div>

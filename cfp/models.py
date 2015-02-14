@@ -3,6 +3,7 @@ import urllib.parse
 
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 
 from django_countries.fields import CountryField
 from django_fsm import FSMField, transition
@@ -67,6 +68,14 @@ class Call(models.Model):
     tweet_id = models.BigIntegerField(db_index=True, default=0)
     state = FSMField(default='new', protected=True, db_index=True)
 
+    # These fields are used for the submission form,
+    # probably want to do something better here in the future
+    needs_audience = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "{} CFP".format(self.conference)
+
+
     def get_absolute_url(self):
         return reverse('call_read',
                        args=[self.conference.slug, self.conference.start.year])
@@ -88,3 +97,71 @@ class Call(models.Model):
     @transition(field=state, source='*', target='rejected')
     def reject(self):
         pass
+
+
+class Track(models.Model):
+    conference = models.ForeignKey('Conference')
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+LEVELS = ((1, 'Beginner'), (2, 'Intermidiate'), (3, 'Advancded'))
+
+
+class Talk(models.Model):
+    title = models.CharField(max_length=300)
+    track = models.ForeignKey('Track', null=True, blank=True)
+    call = models.ForeignKey('Call')
+    profile = models.ForeignKey('Profile')
+    abstract = models.TextField()
+    audience = models.IntegerField(choices=LEVELS, default=1, blank=True)
+    state = FSMField(default='new', protected=True, db_index=True)
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('talk_read', args=[self.id])
+
+
+class Profile(models.Model):
+    owner = models.ForeignKey(User, null=True)
+    first_name = models.CharField(max_length=300)
+    last_name = models.CharField(max_length=300)
+    email_address = models.EmailField(max_length=254)
+
+    bio = models.TextField(blank=True)
+    personal_website = models.URLField(max_length=500, blank=True)
+    twitter_handle = models.CharField(max_length=20, blank=True)
+    github_handle = models.CharField(max_length=20, blank=True)
+    organization = models.CharField(max_length=100, blank=True)
+    job_title = models.CharField(max_length=50, blank=True)
+
+    @classmethod
+    def generate(cls, user):
+        try:
+            profile = cls.objects.get(owner=user)
+        except cls.DoesNotExist:
+            profile = cls(owner=user)
+        if not profile.first_name:
+            profile.first_name = user.first_name
+        if not profile.last_name:
+            profile.last_name = user.last_name
+        if not profile.email_address:
+            profile.email_address = user.email
+        return profile
+
+    def __str__(self):
+        return self.email_address
+
+    def is_empty(self):
+        return any((
+            len(self.bio) == 0,
+            len(self.personal_website) == 0,
+            len(self.twitter_handle) == 0,
+            len(self.github_handle) == 0,
+            len(self.organization) == 0,
+            len(self.job_title) == 0,
+            len(self.first_name) == 0,
+            len(self.last_name) == 0))

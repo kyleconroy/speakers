@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
+from cfp.models import Talk, Profile
+
 
 def parse_handle(handle):
     for r in ["http://", "https://", "www.twitter.com/", "twitter.com/", "@"]:
@@ -57,3 +59,15 @@ class AuthenticationForm(forms.Form):
                     code='inactive',
                 )
         return self.cleaned_data
+
+
+class TalkForm(forms.ModelForm):
+    class Meta:
+        model = Talk
+        fields = ('title', 'abstract', 'track', 'audience')
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        exclude = ('owner',)

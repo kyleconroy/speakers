@@ -43,7 +43,6 @@ class Common(Configuration):
 
         'social.apps.django_app.default',
         'markdown_deux',
-        'bootstrap3',
         'cfp',
     )
 
@@ -68,6 +67,7 @@ class Common(Configuration):
         'django.contrib.messages.context_processors.messages',
         'social.apps.django_app.context_processors.backends',
         'social.apps.django_app.context_processors.login_redirect',
+        'cfp.context_processors.empty_profile',
     )
 
     ROOT_URLCONF = 'calltospeakers.urls'
