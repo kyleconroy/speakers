@@ -72,7 +72,7 @@ class CallAdmin(admin.ModelAdmin):
 
 @admin.register(Talk)
 class TalkAdmin(admin.ModelAdmin):
-    readonly_fields = ('call','state',)
+    readonly_fields = ('call','state','token',)
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):

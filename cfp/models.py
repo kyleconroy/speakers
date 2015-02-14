@@ -117,7 +117,7 @@ LEVELS = ((1, 'Beginner'), (2, 'Intermidiate'), (3, 'Advancded'))
 
 
 class Talk(models.Model):
-    token = models.CharField(max_length=15)
+    token = models.CharField(max_length=15, unique=True)
     title = models.CharField(max_length=300)
     track = models.ForeignKey('Track', null=True, blank=True)
     call = models.ForeignKey('Call')
