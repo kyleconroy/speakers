@@ -80,7 +80,7 @@
         {% endfor %}
       </ul>
       {% endif %}
-      {% if form %}
+      {% if form and call.is_open %}
       <h3>Submit a talk</h3>
       <form action="" method="post" class="form">
         {% csrf_token %}

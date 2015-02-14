@@ -143,7 +143,11 @@ def call_detail_and_form(request, slug, year):
     call = get_object_or_404(Call, conference__start__year=year,
                                    conference__slug=slug)
 
-    if request.method == 'POST' and request.user.is_authenticated():
+    if request.method == 'POST' and not call.is_open():
+        messages.error(request, "Talk submission is closed.")
+        profile_form = ProfileForm()
+        form = TalkForm()
+    elif request.method == 'POST' and request.user.is_authenticated():
         form = TalkForm(request.POST)
         if form.is_valid():
             if not form.instance.audience:
