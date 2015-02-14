@@ -38,6 +38,9 @@
           <ul>
           {% if user.is_authenticated %}
           <li>{{ user.email }}</li>
+          <li><a class="btn" href="{% url 'profile' %}">
+              Speaker Profile
+          </a></li>
           <li><a class="btn" href="{% url 'logout' %}">
               Log out
           </a></li>
@@ -47,7 +50,20 @@
           {% endif %}
           </ul>
         </header>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
       <div id="content">
+        {% if empty_profile %}
+        <div class="callout">
+          <span>Your speaker profile is incomplete! We won't be able to submit your talks until you fill in all information.</span>
+          <a class="btn" href="{% url "profile" %}">Fill out your speaker profile</a>
+        </div>
+        {% endif %}
         {% block content %}{% endblock %}
       </div>
       <footer>

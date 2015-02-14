@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div id="new-cfp-callout">
+{% if not empty_profile %}
+<div class="callout">
   <span>Are we missing your favorite conference? Help us out and add it to our list!</span>
   <a class="btn" href="{% url "conference_create" %}">Submit a call for speakers</a>
 </div>
-
+{% endif %}
 <ul id="conferences" class="table-list">
   <li class="table-list-header">
     <div class="table-list-cell call-days">Closes</div>

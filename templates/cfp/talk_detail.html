@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3>{{ talk.title }}</h3>
+<p>Submitted to <a href="{{ talk.call.get_absolute_url }}">{{talk.call}}</a></p>
+<article>
+  {{ talk.abstract }}
+</article>
+{% endblock %}

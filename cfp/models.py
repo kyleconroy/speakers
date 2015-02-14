@@ -121,6 +121,9 @@ class Talk(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('talk_read', args=[self.id])
+
 
 class Profile(models.Model):
     owner = models.ForeignKey(User, null=True)
@@ -152,4 +155,13 @@ class Profile(models.Model):
     def __str__(self):
         return self.email_address
 
-
+    def is_empty(self):
+        return any((
+            len(self.bio) == 0,
+            len(self.personal_website) == 0,
+            len(self.twitter_handle) == 0,
+            len(self.github_handle) == 0,
+            len(self.organization) == 0,
+            len(self.job_title) == 0,
+            len(self.first_name) == 0,
+            len(self.last_name) == 0))

@@ -55,6 +55,14 @@ urlpatterns = [
         views.LatestCallsFeed(),
         name='call_feed'),
     url(
+        r'^profile$',
+        views.ProfileEdit.as_view(),
+        name='profile'),
+    url(
+        r'^talks/(?P<pk>\d+)$',
+        views.TalkDetail.as_view(),
+        name='talk_read'),
+    url(
         r'^(?P<year>\d+)/(?P<slug>[\w-]+)$',
         views.legacy,
         name='legacy_redirect'),
@@ -62,10 +70,6 @@ urlpatterns = [
         r'^(?P<slug>[\w-]+)/(?P<year>\d+)/call/new$',
         views.CallCreate.as_view(),
         name='call_create'),
-    url(
-        r'^(?P<slug>[\w-]+)/(?P<year>\d+)/talk$',
-        views.TalkCreate.as_view(),
-        name='talk_create'),
     url(
         r'^(?P<slug>[\w-]+)/(?P<year>\d+)/call/edit$',
         views.CallEdit.as_view(),
@@ -76,11 +80,10 @@ urlpatterns = [
         name='conference_edit'),
     url(
         r'^(?P<slug>[\w-]+)/(?P<year>\d+)$',
-        views.CallDetail.as_view(),
+        views.call_detail_and_form,
         name='call_read'),
     url(
         r'^$',
         views.CallList.as_view(),
-        name='call_list'
-    ),
+        name='call_list'),
 ]

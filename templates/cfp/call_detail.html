@@ -72,27 +72,27 @@
       </div>
       {% endif %}
       </div>
+      {% if talks %}
+      <h3>Previously submitted talks for this conference</h3>
+      <ul>
+        {% for talk in talks %}
+        <li><a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
       {% if form %}
-      <form action="{% url 'talk_create' conf.slug conf.start.year %}" method="post" class="form">
+      <h3>Submit a new talk</h3>
+      <form action="" method="post" class="form">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Submit a talk</button>
-        {% if user.is_authenticated %}
-        {% else %}
-        <p>Since you're not logged in, you'll need to enter additional profile information</p>
+        {% if profile_form %}
+        <p class="callout">Save your profile information for future submissions. <a href="{% url 'signup' %}">Sign up now!</a></p>
+        {{ profile_form.as_p }}
         {% endif %}
+        <button type="submit" class="btn btn-primary">Submit a talk</button>
       </form>
       {% endif %}
-      {% if talk %}
-      <div>
-        <p>Congratulations! You've already submitted a talk to this conference</p>
-        <div>{{ talk.title }}</div>
-        <div>{{ talk.abstract }}</div>
-        <a class="btn" href="">View full submission</a>
-      </div>
-      {% endif %}
     </div>
-  </div>
 </div>
 {% endwith %}
 {% endblock %}

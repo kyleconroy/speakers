@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
-from cfp.models import Talk
+from cfp.models import Talk, Profile
 
 
 def parse_handle(handle):
@@ -67,11 +67,7 @@ class TalkForm(forms.ModelForm):
         fields = ('title', 'abstract', 'track', 'audience')
 
 
-class AnonymousTalkForm(forms.ModelForm):
-    first_name = forms.CharField(max_length=300)
-    last_name = forms.CharField(max_length=300)
-    email_address = forms.EmailField(max_length=254)
-
+class ProfileForm(forms.ModelForm):
     class Meta:
-        model = Talk
-        fields = ('title', 'abstract', 'track', 'audience')
+        model = Profile
+        exclude = ('owner',)

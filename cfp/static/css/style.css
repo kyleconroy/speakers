@@ -434,13 +434,14 @@ body {
 
 .btn {
   text-decoration: none;
-  display: block;
+  display: inline-block;
   border: 1px solid #bbb;
   border-bottom: 2px solid #bbb;
   border-radius: 3px;
   padding: 10px;
   text-align: center;
   color: #222;
+  background: #fff;
 }
 
 .btn:hover {
@@ -458,6 +459,10 @@ body {
   background: #65dd86;
 }
 
+.btn-fill {
+  display: block
+}
+
 .slim {
   max-width: 500px;
   margin: 0 auto;
@@ -473,6 +478,24 @@ body {
   width: 100%;
 }
 
+.form > ul {
+  padding: 0;
+  maring: 0;
+  margin: 0;
+  font-size: 10px;
+  text-transform: uppercase;
+  list-style-type: none;
+  color: red;
+}
+
+.form > ul:before {
+  content: "▼ ";
+}
+
+.form > ul > li {
+  display: inline-block;
+}
+
 
 .form-inline {
   display: flex;
@@ -484,7 +507,18 @@ body {
   justify-content: space-between;
 }
 
+.messages {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
 
+.messages li {
+  padding: 10px;
+  background: #adf1b3;
+  border: 1px solid #50a859;
+  border-radius: 3px;
+}
 
 /* BASE */
 
@@ -504,6 +538,7 @@ body {
 #nav {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 #nav .site-title {
@@ -560,14 +595,15 @@ body {
 
 /* HOME PAGE */
 
-#new-cfp-callout {
+.callout {
+  background: #cef1fa;
+  border: 1px solid #78d3ea;
   padding: 10px;
   margin: 10px 0;
   display: flex;
   align-items: center;
   justify-content: space-around;
   border-radius: 3px;
-  border: 1px solid #ccc;
 }
 
 .table-list {
@@ -666,9 +702,9 @@ body {
 
 #call-close-notification {
   margin: 10px 0;
-  background: #cef1fa;
   text-align: center;
   border-radius: 5px;
+  background: #cef1fa;
   border: 1px solid #78d3ea;
   padding: 10px 0;
   display: flex;
@@ -681,7 +717,7 @@ body {
   background-repeat: no-repeat;
   background-size: 70px 249px;
   text-align: center;
-  width: 70px;
+  min-width: 70px;
   font-size: 30px;
   height: 50px;
   padding: 30px 0 0 0;

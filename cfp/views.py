@@ -1,7 +1,10 @@
 from datetime import datetime, timedelta
 
 from django.db import transaction
+from django.core.exceptions import PermissionDenied
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.syndication.views import Feed
 from django.core.urlresolvers import reverse
@@ -9,12 +12,13 @@ from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, FormView, UpdateView
 from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.utils.text import slugify
+from django.http import HttpResponseRedirect
 
 from cfp.models import Call, Conference, Track, Talk, Profile
 from cfp.forms import UserCreationForm, AuthenticationForm
-from cfp.forms import AnonymousTalkForm, TalkForm
+from cfp.forms import TalkForm, ProfileForm
 
 CONFERENCE_FIELDS = (
     'name',
@@ -48,8 +52,13 @@ def legacy(r, year, slug):
                     permanent=True)
 
 
-class StaffRequiredMixin(object):
+class LoginRequiredMixin(object):
+    @classmethod
+    def as_view(cls):
+        return login_required(super(LoginRequiredMixin, cls).as_view())
 
+
+class StaffRequiredMixin(object):
     @classmethod
     def as_view(cls):
         return staff_member_required(super(StaffRequiredMixin, cls).as_view())
@@ -98,6 +107,18 @@ class CallCreate(CreateView):
         return super(CallCreate, self).form_valid(form)
 
 
+class ProfileEdit(LoginRequiredMixin, UpdateView):
+    model = Profile
+    form_class = ProfileForm
+    success_url = "/profile"
+
+    def get_object(self, queryset=None):
+        profile = Profile.generate(self.request.user)
+        if not profile.pk:
+            profile.save()
+        return profile
+
+
 class CallEdit(StaffRequiredMixin, UpdateView):
     model = Call
     fields = CALL_FIELDS
@@ -114,82 +135,62 @@ class CallEdit(StaffRequiredMixin, UpdateView):
                                      conference__slug=self.kwargs['slug'])
 
 
-class CallDetail(DetailView):
-    model = Call
-    context_object_name = 'call'
+def call_detail_and_form(request, slug, year):
+    call = get_object_or_404(Call, conference__start__year=year,
+                                   conference__slug=slug)
 
-    def get_context_data(self, **kwargs):
-        context = super(CallDetail, self).get_context_data(**kwargs)
+    if request.method == 'POST' and request.user.is_authenticated():
+        form = TalkForm(request.POST)
+        if form.is_valid():
+            if not form.instance.audience:
+                form.instance.audience = 1
+            with transaction.atomic():
+                profile = Profile.generate(request.user)
+                profile.save()
+                form.instance.call = call
+                form.instance.profile = profile
+                form.save()
+            messages.success(request, "Talk successfully submitted. High five!")
+            return HttpResponseRedirect(call.get_absolute_url())
 
-        if self.request.user.is_authenticated():
-            try:
-                context['talk'] = Talk.objects.get(call=self.object,
-                                                   profile__owner=self.request.user)
-                return context
-            except Talk.DoesNotExist:
-                pass
+    elif request.method == 'POST':
+        form = TalkForm(request.POST)
+        profile_form = ProfileForm(request.POST)
+        if form.is_valid() and profile_form.is_valid():
+            if not form.instance.audience:
+                form.instance.audience = 1
+            with transaction.atomic():
+                form.instance.call = call
+                form.instance.profile = profile_form.save()
+                form.save()
+            messages.success(request, "Talk successfully submitted. High five!")
+            return HttpResponseRedirect(call.get_absolute_url())
 
-        qs = Track.objects.filter(conference=self.object.conference.id)
+    else:
+        profile_form = ProfileForm()
+        form = TalkForm()
 
-        if self.request.user.is_authenticated():
-            form = TalkForm()
-        else:
-            form = AnonymousTalkForm()
+    context = {'call': call}
 
-        form.fields['track'].queryset = qs
+    if request.user.is_authenticated():
+        context['talks'] = Talk.objects.filter(call=call,
+                                               profile__owner=request.user)
 
-        if qs.count() == 0:
-            del form.fields['track']
+    if not request.user.is_authenticated():
+        context['profile_form'] = profile_form
 
-        if not self.object.needs_audience:
-            del form.fields['audience']
+    form.fields['track'].queryset = \
+        Track.objects.filter(conference=call.conference.id)
 
-        context['form'] = form
-        return context
+    if form.fields['track'].queryset.count() == 0:
+        del form.fields['track']
 
-    def get_object(self, qs=None):
-        if qs is None:
-            qs = self.get_queryset()
-        return get_object_or_404(qs, conference__start__year=self.kwargs['year'],
-                                     conference__slug=self.kwargs['slug'])
+    if not call.needs_audience:
+        del form.fields['audience']
 
+    context['form'] = form
 
-class TalkCreate(FormView):
-    template_name = 'cfp/talk_form.html'
-
-    def get_form_class(self):
-        if self.request.user.is_authenticated():
-            return TalkForm
-        else:
-            return AnonymousTalkForm
-
-    def get_success_url(self):
-        call = get_object_or_404(Call, conference__start__year=self.kwargs['year'],
-                                       conference__slug=self.kwargs['slug'])
-        return call.get_absolute_url()
-
-    def form_valid(self, form):
-        call = get_object_or_404(Call, conference__start__year=self.kwargs['year'],
-                                       conference__slug=self.kwargs['slug'])
-
-        if self.request.user.is_authenticated():
-            profile = Profile.generate(self.request.user)
-        else:
-            profile = Profile()
-            profile.first_name = form.cleaned_data['first_name']
-            profile.last_name = form.cleaned_data['last_name']
-            profile.email_address = form.cleaned_data['email_address']
-
-        if not form.instance.audience:
-            form.instance.audience = 1
-
-        with transaction.atomic():
-            profile.save()
-            form.instance.call = call
-            form.instance.profile = profile
-            form.save()
-
-        return super(TalkCreate, self).form_valid(form)
+    return render(request, 'cfp/call_detail.html', context)
 
 
 class CallList(ListView):
@@ -202,6 +203,19 @@ class CallList(ListView):
                        start__lte=datetime.utcnow(),
                        end__gte=datetime.utcnow())
         return qs.order_by('end')
+
+
+class TalkDetail(LoginRequiredMixin, DetailView):
+    model = Talk
+    context_object_name = 'talk'
+
+    def get_object(self):
+        obj = super(TalkDetail, self).get_object()
+        if not obj.profile.owner:
+            raise PermissionDenied()
+        if obj.profile.owner.id != self.request.user.id:
+            raise PermissionDenied()
+        return obj
 
 
 class LatestCallsFeed(Feed):
