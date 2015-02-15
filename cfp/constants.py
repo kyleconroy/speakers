@@ -49,6 +49,7 @@ _langs = (
     'Opa',
     'Packer',
     'Perl',
+    'PHP',
     'Phalcon',
     'PlayFramework',
     'Plone',
