@@ -10,6 +10,8 @@ from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from django_fsm import FSMField, transition
 
+from cfp import constants
+
 
 def token(size):
     c = string.ascii_uppercase + string.digits
@@ -31,6 +33,8 @@ class Conference(models.Model):
 
     tagline = models.CharField(max_length=255)
     description = models.TextField()
+    programming_language = models.CharField(max_length=30, db_index=True,
+        choices=constants.PROGRAMMING_LANGUAGES, default='')
 
     twitter_handle = models.CharField(max_length=20, blank=True)
     twitter_hashtag = models.CharField(max_length=20, blank=True)

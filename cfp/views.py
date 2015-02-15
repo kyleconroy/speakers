@@ -32,6 +32,7 @@ CONFERENCE_FIELDS = (
     'twitter_hashtag',
     'venue_name',
     'venue_address',
+    'programming_language',
     'city',
     'state',
     'country',
