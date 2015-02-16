@@ -38,6 +38,7 @@ class ConferenceAdmin(admin.ModelAdmin):
     list_filter = ('call__state', 'created')
     list_display = ('name', 'start', 'end', 'created')
     readonly_fields = ('maps_url',)
+    search_fields = ['name']
     actions = [make_all_approved, make_all_rejected]
 
 
@@ -67,6 +68,7 @@ class CallAdmin(admin.ModelAdmin):
     list_display = ('conference', 'start', 'end', 'created', 'state')
     list_filter = ('state', 'created')
     readonly_fields = ('state',)
+    search_fields = ['conference__name']
     actions = [make_approved, make_rejected, make_spam]
 
 
