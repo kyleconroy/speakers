@@ -170,6 +170,7 @@ def call_detail_and_form(request, slug, year):
             if not form.instance.audience:
                 form.instance.audience = 1
             with transaction.atomic():
+                form.instance.token = token(15)
                 form.instance.call = call
                 form.instance.profile = profile_form.save()
                 form.save()
