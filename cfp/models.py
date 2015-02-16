@@ -133,6 +133,10 @@ class Talk(models.Model):
     def __str__(self):
         return self.title
 
+    @transition(field=state, source='new', target='submitted')
+    def submit(self):
+        pass
+
     def get_absolute_url(self):
         return reverse('talk_read', args=[self.id])
 

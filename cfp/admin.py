@@ -70,9 +70,18 @@ class CallAdmin(admin.ModelAdmin):
     actions = [make_approved, make_rejected, make_spam]
 
 
+def make_submitted(modeladmin, request, queryset):
+    for talk in queryset.all():
+        talk.submit()
+        talk.save()
+make_submitted.short_description = "Mark selected talks as submitted"
+
 @admin.register(Talk)
 class TalkAdmin(admin.ModelAdmin):
     readonly_fields = ('call','state','token',)
+    list_filter = ('state', 'created')
+    actions = [make_submitted]
+
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
