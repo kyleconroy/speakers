@@ -121,6 +121,7 @@ LEVELS = ((1, 'Beginner'), (2, 'Intermidiate'), (3, 'Advancded'))
 
 
 class Talk(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
     token = models.CharField(max_length=15, unique=True)
     title = models.CharField(max_length=300)
     track = models.ForeignKey('Track', null=True, blank=True)
@@ -142,6 +143,7 @@ class Talk(models.Model):
 
 
 class Profile(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User, null=True)
     first_name = models.CharField(max_length=300)
     last_name = models.CharField(max_length=300)
