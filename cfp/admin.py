@@ -82,12 +82,13 @@ make_submitted.short_description = "Mark selected talks as submitted"
 class TalkAdmin(admin.ModelAdmin):
     readonly_fields = ('call','state','token',)
     list_filter = ('state', 'created')
+    list_display = ('title', 'call', 'profile', 'created', 'state')
     actions = [make_submitted]
 
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('first_name', 'last_name', 'email_address', 'owner', 'created')
 
 @admin.register(Track)
 class TrackAdmin(admin.ModelAdmin):
