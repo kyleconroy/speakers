@@ -34,7 +34,7 @@ class Conference(models.Model):
     tagline = models.CharField(max_length=255)
     description = models.TextField()
     programming_language = models.CharField(max_length=30, db_index=True,
-        choices=constants.PROGRAMMING_LANGUAGES, default='')
+        choices=constants.PROGRAMMING_LANGUAGES, default='', blank=True)
 
     twitter_handle = models.CharField(max_length=20, blank=True)
     twitter_hashtag = models.CharField(max_length=20, blank=True)
