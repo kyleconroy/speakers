@@ -496,6 +496,11 @@ body {
   display: inline-block;
 }
 
+.form .helptext {
+  font-size: 14px;
+  color: #aaa;
+}
+
 
 .form-inline {
   display: flex;
