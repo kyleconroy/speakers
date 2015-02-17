@@ -142,7 +142,8 @@ class CallEdit(StaffRequiredMixin, UpdateView):
 
 def call_detail_and_form(request, slug, year):
     call = get_object_or_404(Call, conference__start__year=year,
-                                   conference__slug=slug)
+                                   conference__slug=slug,
+                                   state='approved')
 
     if request.method == 'POST' and not call.is_open():
         messages.error(request, "Talk submission is closed.")
