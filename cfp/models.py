@@ -144,7 +144,7 @@ class Talk(models.Model):
 
 class Profile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    owner = models.ForeignKey(User, null=True)
+    owner = models.ForeignKey(User, null=True, blank=True)
     first_name = models.CharField(max_length=300)
     last_name = models.CharField(max_length=300)
     email_address = models.EmailField(max_length=254)
