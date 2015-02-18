@@ -701,6 +701,8 @@ body {
 
 #call-text {
   flex: 1;
+  display: flex;
+  flex-direction: column;
   padding: 0 10px;
   min-width: 300px;
 }
@@ -746,4 +748,5 @@ body {
   width: 100%;
   min-height: 600px;
   border: 0;
+  flex: 1;
 }
