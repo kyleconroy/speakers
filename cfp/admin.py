@@ -71,7 +71,7 @@ make_rejected.short_description = "Mark selected calls as rejected"
 @admin.register(Call)
 class CallAdmin(admin.ModelAdmin):
     list_display = ('conference', 'start', 'end', 'created', 'state')
-    list_filter = ('state', 'created')
+    list_filter = ('state', 'created', 'hosted')
     readonly_fields = ('state',)
     search_fields = ['conference__name']
     actions = [make_approved, make_rejected, make_spam]

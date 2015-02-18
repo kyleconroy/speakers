@@ -84,6 +84,10 @@ class Call(models.Model):
     # probably want to do something better here in the future
     needs_audience = models.BooleanField(default=False)
 
+    # If true, we'll show the form on the website. Otherwise
+    # just post a link to the talk
+    hosted = models.BooleanField(default=False)
+
     def __str__(self):
         return "{} CFP".format(self.conference)
 
