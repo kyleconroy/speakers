@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from cfp.models import Call, Conference, Track, Profile, Talk
+from cfp.models import Call, Conference, Track, Profile, Talk, Format
 
 
 class CallInline(admin.StackedInline):
@@ -11,6 +11,10 @@ class CallInline(admin.StackedInline):
 
 class TrackInline(admin.StackedInline):
     model = Track
+
+
+class FormatInline(admin.StackedInline):
+    model = Format
 
 
 def make_all_approved(modeladmin, request, queryset):
@@ -34,6 +38,7 @@ class ConferenceAdmin(admin.ModelAdmin):
     inlines = [
         CallInline,
         TrackInline,
+        FormatInline,
     ]
     list_filter = ('call__state', 'created')
     list_display = ('name', 'start', 'end', 'created')
@@ -78,9 +83,10 @@ def make_submitted(modeladmin, request, queryset):
         talk.save()
 make_submitted.short_description = "Mark selected talks as submitted"
 
+
 @admin.register(Talk)
 class TalkAdmin(admin.ModelAdmin):
-    readonly_fields = ('call','state','token',)
+    readonly_fields = ('call', 'state', 'token',)
     list_filter = ('state', 'created')
     list_display = ('title', 'call', 'profile', 'created', 'state')
     actions = [make_submitted]
@@ -88,10 +94,15 @@ class TalkAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'email_address', 'owner', 'created')
+    list_display = ('first_name', 'last_name', 'email_address',
+                    'owner', 'created')
+
 
 @admin.register(Track)
 class TrackAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(Format)
+class FormatAdmin(admin.ModelAdmin):
+    pass

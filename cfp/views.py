@@ -17,7 +17,7 @@ from django.shortcuts import redirect, render
 from django.utils.text import slugify
 from django.http import HttpResponseRedirect
 
-from cfp.models import Call, Conference, Track, Talk, Profile, token
+from cfp.models import Call, Conference, Track, Talk, Profile, token, Format
 from cfp.forms import UserCreationForm, AuthenticationForm, parse_handle
 from cfp.forms import TalkForm, ProfileForm, ReadOnlyForm
 
@@ -223,6 +223,12 @@ def call_detail_and_form(request, slug, year):
 
     if form.fields['track'].queryset.count() == 0:
         del form.fields['track']
+
+    form.fields['format'].queryset = \
+        Format.objects.filter(conference=call.conference.id)
+
+    if form.fields['format'].queryset.count() == 0:
+        del form.fields['format']
 
     if not call.needs_audience:
         del form.fields['audience']
