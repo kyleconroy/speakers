@@ -167,9 +167,7 @@ class Profile(models.Model):
     github_handle = models.CharField(max_length=20, blank=True)
     organization = models.CharField(max_length=100, blank=True)
     job_title = models.CharField(max_length=50, blank=True)
-    phone_number = models.CharField(
-        max_length=20, blank=True,
-        help_text='Your number is private and never shared with conferences')
+    phone_number = models.CharField(max_length=20, blank=True)
     city = models.CharField(max_length=60, blank=True)
     country = CountryField(default='US')
 

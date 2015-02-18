@@ -741,3 +741,9 @@ body {
 .calendar-closed {
   background-position: 0 -170px;
 }
+
+#embed {
+  width: 100%;
+  min-height: 600px;
+  border: 0;
+}

@@ -80,17 +80,9 @@
         {% endfor %}
       </ul>
       {% endif %}
-      {% if form and call.is_open %}
-      <h3>Submit a talk</h3>
-      <form action="" method="post" class="form">
-        {% csrf_token %}
-        {{ form.as_p }}
-        {% if profile_form %}
-        <p class="callout">Save your profile information for future submissions. <a href="{% url 'signup' %}">Sign up now!</a></p>
-        {{ profile_form.as_p }}
-        {% endif %}
-        <button type="submit" class="btn btn-primary">Submit a talk</button>
-      </form>
+      {% if call.is_open %}
+      <h3><a href="{{call.application_url}}">Submit a talk</a></h3>
+      <iframe id="embed" src="{{ call.application_url }}"></iframe>
       {% endif %}
     </div>
 </div>
