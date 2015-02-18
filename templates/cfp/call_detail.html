@@ -47,6 +47,9 @@
     {% endif %}
 
     <article class="post-content">
+      {{ conf.description|markdown }}
+    </article>
+    <article class="post-content">
       {{ call.description|markdown }}
     </article>
   </div>
