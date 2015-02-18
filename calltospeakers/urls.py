@@ -63,6 +63,15 @@ urlpatterns = [
         views.TalkDetail.as_view(),
         name='talk_read'),
     url(
+        r'^submissions/(?P<pk>\d+)$',
+        views.SubmissionDetail.as_view(),
+        name='submission_read'),
+    url(
+        r'^submissions$',
+        views.SubmissionList.as_view(),
+        name='submission_list'),
+
+    url(
         r'^(?P<year>\d+)/(?P<slug>[\w-]+)$',
         views.legacy,
         name='legacy_redirect'),

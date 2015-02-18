@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.syndication.views import Feed
 from django.core.urlresolvers import reverse
+from django.forms.models import modelform_factory
 from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, FormView, UpdateView
@@ -18,7 +19,7 @@ from django.http import HttpResponseRedirect
 
 from cfp.models import Call, Conference, Track, Talk, Profile, token
 from cfp.forms import UserCreationForm, AuthenticationForm, parse_handle
-from cfp.forms import TalkForm, ProfileForm
+from cfp.forms import TalkForm, ProfileForm, ReadOnlyForm
 
 CONFERENCE_FIELDS = (
     'name',
@@ -94,7 +95,32 @@ class ConferenceEdit(StaffRequiredMixin, UpdateView):
         if qs is None:
             qs = self.get_queryset()
         return get_object_or_404(qs, start__year=self.kwargs['year'],
-                                     slug=self.kwargs['slug'])
+                                 slug=self.kwargs['slug'])
+
+
+class SubmissionDetail(StaffRequiredMixin, DetailView):
+    model = Talk
+    template_name = 'cfp/submission_detail.html'
+
+    def get_context_data(self, object=None):
+        context = super(SubmissionDetail, self).get_context_data()
+        talk = modelform_factory(Talk, form=ReadOnlyForm, exclude=('call',))
+        prof = modelform_factory(Profile, form=ReadOnlyForm, exclude=('id',))
+        call = modelform_factory(Call, form=ReadOnlyForm, exclude=('id',))
+
+        context['talkform'] = talk(instance=self.object)
+        context['profform'] = prof(instance=self.object.profile)
+        context['callform'] = call(instance=self.object.call)
+        return context
+
+
+class SubmissionList(StaffRequiredMixin, ListView):
+    model = Talk
+    template_name = 'cfp/submission_list.html'
+
+    def get_queryset(self):
+        qs = super(SubmissionList, self).get_queryset()
+        return qs.filter(state='new')
 
 
 class CallCreate(CreateView):
@@ -133,17 +159,18 @@ class CallEdit(StaffRequiredMixin, UpdateView):
             form.instance.notify = form.instance.end + timedelta(days=7)
         return super(CallEdit, self).form_valid(form)
 
-    def get_object(self, queryset=None):
+    def get_object(self, qs=None):
         if qs is None:
             qs = self.get_queryset()
-        return get_object_or_404(qs, conference__start__year=self.kwargs['year'],
-                                     conference__slug=self.kwargs['slug'])
+        return get_object_or_404(
+            qs, conference__start__year=self.kwargs['year'],
+            conference__slug=self.kwargs['slug'])
 
 
 def call_detail_and_form(request, slug, year):
     call = get_object_or_404(Call, conference__start__year=year,
-                                   conference__slug=slug,
-                                   state='approved')
+                             conference__slug=slug,
+                             state='approved')
 
     if request.method == 'POST' and not call.is_open():
         messages.error(request, "Talk submission is closed.")
@@ -161,7 +188,7 @@ def call_detail_and_form(request, slug, year):
                 form.instance.call = call
                 form.instance.profile = profile
                 form.save()
-            messages.success(request, "Talk successfully submitted. High five!")
+            messages.success(request, "Talk successfully submitted. You rock!")
             return HttpResponseRedirect(call.get_absolute_url())
 
     elif request.method == 'POST':
@@ -175,7 +202,7 @@ def call_detail_and_form(request, slug, year):
                 form.instance.call = call
                 form.instance.profile = profile_form.save()
                 form.save()
-            messages.success(request, "Talk successfully submitted. High five!")
+            messages.success(request, "Talk successfully submitted. You rock!")
             return HttpResponseRedirect(call.get_absolute_url())
 
     else:

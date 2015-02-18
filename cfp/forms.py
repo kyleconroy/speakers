@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.forms.widgets import Select
 
 from cfp.models import Talk, Profile
 
@@ -17,7 +18,7 @@ class UserCreationForm(forms.ModelForm):
     password.
     """
     password1 = forms.CharField(label="Password", min_length=8,
-        widget=forms.PasswordInput)
+                                widget=forms.PasswordInput)
 
     class Meta:
         model = User
@@ -71,3 +72,15 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         exclude = ('owner',)
+
+
+class ReadOnlyForm(forms.ModelForm):
+    """Base class for making a form readonly."""
+    def __init__(self, *args, **kwargs):
+        super(ReadOnlyForm, self).__init__(*args, **kwargs)
+        for f in self.fields:
+            self.fields[f].label = self.fields[f].label
+            if isinstance(self.fields[f].widget, Select):
+                self.fields[f].widget.attrs['disabled'] = 'disabled'
+            else:
+                self.fields[f].widget.attrs['readonly'] = 'readonly'

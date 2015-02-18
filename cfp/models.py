@@ -33,8 +33,9 @@ class Conference(models.Model):
 
     tagline = models.CharField(max_length=255)
     description = models.TextField()
-    programming_language = models.CharField(max_length=30, db_index=True,
-        choices=constants.PROGRAMMING_LANGUAGES, default='', blank=True)
+    programming_language = models.CharField(
+        max_length=30, db_index=True, default='',
+        choices=constants.PROGRAMMING_LANGUAGES, blank=True)
 
     twitter_handle = models.CharField(max_length=20, blank=True)
     twitter_hashtag = models.CharField(max_length=20, blank=True)
@@ -85,7 +86,6 @@ class Call(models.Model):
 
     def __str__(self):
         return "{} CFP".format(self.conference)
-
 
     def get_absolute_url(self):
         return reverse('call_read',
@@ -141,6 +141,9 @@ class Talk(models.Model):
     def get_absolute_url(self):
         return reverse('talk_read', args=[self.id])
 
+    def get_admin_url(self):
+        return reverse('submission_read', args=[self.id])
+
 
 class Profile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -155,8 +158,9 @@ class Profile(models.Model):
     github_handle = models.CharField(max_length=20, blank=True)
     organization = models.CharField(max_length=100, blank=True)
     job_title = models.CharField(max_length=50, blank=True)
-    phone_number = models.CharField(max_length=20, blank=True,
-        help_text='Your number is private and will never be shared with conferences')
+    phone_number = models.CharField(
+        max_length=20, blank=True,
+        help_text='Your number is private and never shared with conferences')
     city = models.CharField(max_length=60, blank=True)
     country = CountryField(default='US')
 

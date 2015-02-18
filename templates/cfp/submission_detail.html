@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Talk</h2>
+<div class="form">
+  {{ talkform.as_p }}
+</div>
+
+<h2>Profile</h2>
+<div class="form">
+  {{ profform.as_p }}
+</div>
+
+
+<h2>Application</h2>
+<a href="{{ talk.call.application_url }}">{{ talk.call.conference.name }} application</a>
+<div class="form">
+  {{ callform.as_p }}
+</div>
+{% endblock %}

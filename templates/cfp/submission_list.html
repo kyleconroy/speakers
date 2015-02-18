@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<ul class="table-list">
+  <li class="table-list-header">
+    <div class="table-list-cell">Title</div>
+  </li>
+  {% for talk in object_list %}
+  <li>
+    <div class="table-list-cell">
+      <a href="{{ talk.get_admin_url}}">{{ talk.title }}</a>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}
