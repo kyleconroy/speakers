@@ -65,7 +65,7 @@ class AuthenticationForm(forms.Form):
 class TalkForm(forms.ModelForm):
     class Meta:
         model = Talk
-        fields = ('title', 'abstract', 'track', 'audience')
+        fields = ('title', 'abstract', 'track', 'format', 'audience')
 
 
 class ProfileForm(forms.ModelForm):
