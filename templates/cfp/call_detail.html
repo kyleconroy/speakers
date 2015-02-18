@@ -81,8 +81,8 @@
       </ul>
       {% endif %}
       {% if call.is_open %}
-      {% if call.hosted %}
       <h3>Submit a talk</h3>
+      {% if call.hosted %}
       <form action="" method="post" class="form">
         {% csrf_token %}
         {{ form.as_p }}
@@ -92,9 +92,11 @@
         {% endif %}
         <button type="submit" class="btn btn-primary">Submit a talk</button>
       </form>
-      {% else %}
-      <h3><a href="{{call.application_url}}">Submit a talk</a></h3>
+      {% elif call.iframe_url %}
       <iframe id="embed" src="{{ call.iframe_url }}"></iframe>
+      {% else %}
+      <p>Sadly, the {{conf.name}} speaker submission process can't be completed via Call to Speakers. Click the link the below to submit your proposal via the conference's website.</p>
+      <a class="btn btn-primary" href="{{call.application_url}}">Submit a talk</a>
       {% endif %}
       {% endif %}
     </div>

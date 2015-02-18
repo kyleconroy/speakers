@@ -104,7 +104,7 @@ class Call(models.Model):
     def iframe_url(self):
         if 'docs.google.com' in self.application_url:
             return self.application_url + "?embedded=true"
-        return self.application_url
+        return None
 
     @transition(field=state, source='new', target='spam')
     def quarantine(self):
