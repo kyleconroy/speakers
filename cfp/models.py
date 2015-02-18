@@ -97,6 +97,11 @@ class Call(models.Model):
     def days_left(self):
         return (self.end - datetime.utcnow().date()).days
 
+    def iframe_url(self):
+        if 'docs.google.com' in self.application_url:
+            return self.application_url + "?embedded=true"
+        return self.application_url
+
     @transition(field=state, source='new', target='spam')
     def quarantine(self):
         pass
