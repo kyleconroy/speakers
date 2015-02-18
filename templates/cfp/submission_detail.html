@@ -19,5 +19,13 @@
   {{ callform.as_p }}
 </div>
 
-
+<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script>
+  $(".form input").on("click", function () {
+   $(this).select();
+  });
+  $(".form textarea").on("click", function () {
+   $(this).select();
+  });
+</script>
 {% endblock %}
