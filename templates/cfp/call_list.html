@@ -7,6 +7,10 @@
   <a class="btn" href="{% url "conference_create" %}">Submit a call for speakers</a>
 </div>
 {% endif %}
+<form id="search" action="" method="get">
+  <input tabindex="1" type="text" class="searchbar" name="q" value="{{ query }}">
+  <input type="submit" value="Search">
+</form>
 <ul id="conferences" class="table-list">
   <li class="table-list-header">
     <div class="table-list-cell call-days">Closes</div>

@@ -247,7 +247,17 @@ class CallList(ListView):
         qs = qs.filter(state='approved',
                        start__lte=datetime.utcnow(),
                        end__gte=datetime.utcnow())
+
+        q = self.request.GET.get('q')
+        if q:
+            qs = qs.filter(conference__name__icontains=q)
+
         return qs.order_by('end')
+
+    def get_context_data(self):
+        context = super(CallList, self).get_context_data()
+        context['query'] = self.request.GET.get('q') or ""
+        return context
 
 
 class TalkDetail(LoginRequiredMixin, DetailView):

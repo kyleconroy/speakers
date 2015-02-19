@@ -632,6 +632,19 @@ body {
   font-size: 16px;
   font-weight: 500;
 }
+
+#search {
+  display: flex;
+  background: #eee;
+  padding: 10px;
+}
+
+#search .searchbar {
+  display: block;
+  flex: 1;
+  padding: 2px;
+  font-size: 18px;
+}
   
 @media screen and (min-width: 568px) {
   .table-list-header {
@@ -662,6 +675,7 @@ body {
 }
 
 #conferences {
+  width: 100%;
   font-size: 14px;
 }
 
