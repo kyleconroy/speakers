@@ -168,8 +168,7 @@ class Talk(models.Model):
 class Profile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User, null=True, blank=True)
-    first_name = models.CharField(max_length=300)
-    last_name = models.CharField(max_length=300)
+    name = models.CharField(max_length=300)
     email_address = models.EmailField(max_length=254)
 
     bio = models.TextField(blank=True)
@@ -188,10 +187,8 @@ class Profile(models.Model):
             profile = cls.objects.get(owner=user)
         except cls.DoesNotExist:
             profile = cls(owner=user)
-        if not profile.first_name:
-            profile.first_name = user.first_name
-        if not profile.last_name:
-            profile.last_name = user.last_name
+        if not profile.name:
+            profile.name = "{} {}".format(user.first_name, user.last_name)
         if not profile.email_address:
             profile.email_address = user.email
         return profile
@@ -207,5 +204,4 @@ class Profile(models.Model):
             len(self.github_handle) == 0,
             len(self.organization) == 0,
             len(self.job_title) == 0,
-            len(self.first_name) == 0,
-            len(self.last_name) == 0))
+            len(self.name) == 0))

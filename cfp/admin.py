@@ -94,7 +94,7 @@ class TalkAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'email_address',
+    list_display = ('name', 'email_address',
                     'owner', 'created')
 
 
