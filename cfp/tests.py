@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from cfp import models
+from cfp import models, views
 
 
 class CFPTest(TestCase):
@@ -23,3 +23,16 @@ class CFPTest(TestCase):
         iframe_url = ("https://docs.google.com/forms/d/10VztOmnh5KxzWnV"
                       "4OFU2_6uicIDuh5XB-9WUJYqLjCw/viewform?embedded=true")
         self.assertEquals(iframe_url, call.iframe_url())
+
+
+class SearchTest(TestCase):
+    def test_single_quotes(self):
+        self.assertEquals(['foo', 'foo bar', 'baz'],
+                          views.tokenize_query("'foo' 'foo bar' baz"))
+
+    def test_double_quotes(self):
+        self.assertEquals(['foo bar', 'baz'],
+                          views.tokenize_query('"foo bar" baz'))
+
+    def test_whitespace(self):
+        self.assertEquals(['hello'], views.tokenize_query("    hello "))

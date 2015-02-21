@@ -1,3 +1,5 @@
+import itertools
+import re
 from datetime import datetime, timedelta
 
 from django.db import transaction
@@ -238,6 +240,18 @@ def call_detail_and_form(request, slug, year):
     return render(request, 'cfp/call_detail.html', context)
 
 
+def tokenize_query(search):
+    groups = re.findall('([\'"].*?[\'"])|(\w+)', search)
+    return [x.replace("'", "").replace('"', "").strip() for x
+            in list(itertools.chain(*groups)) if x]
+
+
+def sanitize_query(search):
+    search = search.strip()
+    search = re.sub('[\?\|!\*]', '', search)
+    return '&'.join(["'{}'".format(x) for x in tokenize_query(search)])
+
+
 class CallList(ListView):
     model = Call
     context_object_name = 'calls'
@@ -250,7 +264,13 @@ class CallList(ListView):
 
         q = self.request.GET.get('q')
         if q:
-            qs = qs.filter(conference__name__icontains=q)
+            ids = Conference.objects.values_list('id', flat=True).extra(
+                where=[
+                    "cfp_conference.fts_document @@ to_tsquery('simple', %s)"
+                ],
+                params=[sanitize_query(q)]
+            )
+            qs = qs.filter(conference__in=set(ids))
 
         return qs.order_by('end')
 
