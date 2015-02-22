@@ -18,13 +18,13 @@ class Command(BaseCommand):
         l = "https://calltospeakers.com" + call.get_absolute_url()
 
         if h and a:
-            yield "{} call for speakers is now open {} @{} #{}".format(n, l, a, h)
+            yield "{} call for speakers is open {} @{} #{}".format(n, l, a, h)
 
         if a:
-            yield "{} call for speakers is now open {} @{}".format(n, l, a)
+            yield "{} call for speakers is open {} @{}".format(n, l, a)
 
-        yield "{} call for speakers is now open {}".format(n, l)
-        yield "{} call for speakers is now open {}".format(n[:85], l)
+        yield "{} call for speakers is open {}".format(n, l)
+        yield "{} call for speakers is open {}".format(n[:85], l)
 
     def handle(self, *args, **options):
         consumer_key = os.environ['TWITTER_CONSUMER_KEY']
