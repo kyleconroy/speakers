@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 
-from cfp import views, forms
+from cfp import views
 
 
 urlpatterns = [
@@ -62,6 +62,10 @@ urlpatterns = [
         r'^talks/(?P<pk>\d+)$',
         views.TalkDetail.as_view(),
         name='talk_read'),
+    url(
+        r'^submissions/email$',
+        views.SubmissionEmail.as_view(),
+        name='submission_email'),
     url(
         r'^submissions/(?P<pk>\d+)$',
         views.SubmissionDetail.as_view(),

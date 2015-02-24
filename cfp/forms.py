@@ -1,4 +1,8 @@
+import markdown2
+import requests
+
 from django import forms
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.forms.widgets import Select
@@ -84,3 +88,26 @@ class ReadOnlyForm(forms.ModelForm):
                 self.fields[f].widget.attrs['disabled'] = 'disabled'
             else:
                 self.fields[f].widget.attrs['readonly'] = 'readonly'
+
+
+class EmailSubmissionForm(forms.Form):
+    conference_email = forms.EmailField()
+    presenter_name = forms.CharField()
+    presenter_email = forms.EmailField()
+    subject = forms.CharField()
+    body = forms.CharField(widget=forms.Textarea)
+
+    def send_email(self):
+        resp = requests.post(
+            "https://api.mailgun.net/v2/calltospeakers.com/messages",
+            auth=("api", settings.MAILGUN_KEY),
+            data={
+                "from": "{} <robot@calltospeakers.com>".format(
+                    self.cleaned_data['presenter_name']),
+                "to": [self.cleaned_data['conference_email']],
+                "subject": self.cleaned_data['subject'],
+                "text": self.cleaned_data['body'],
+                "html": markdown2.markdown(self.cleaned_data['body']),
+                "h:Reply-To": self.cleaned_data['presenter_email'],
+            })
+        resp.raise_for_status()

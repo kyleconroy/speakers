@@ -21,7 +21,7 @@ from django.http import HttpResponseRedirect
 
 from cfp.models import Call, Conference, Track, Talk, Profile, token, Format
 from cfp.forms import UserCreationForm, AuthenticationForm, parse_handle
-from cfp.forms import TalkForm, ProfileForm, ReadOnlyForm
+from cfp.forms import TalkForm, ProfileForm, ReadOnlyForm, EmailSubmissionForm
 
 CONFERENCE_FIELDS = (
     'name',
@@ -123,6 +123,16 @@ class SubmissionList(StaffRequiredMixin, ListView):
     def get_queryset(self):
         qs = super(SubmissionList, self).get_queryset()
         return qs.filter(state='new')
+
+
+class SubmissionEmail(StaffRequiredMixin, FormView):
+    form_class = EmailSubmissionForm
+    template_name = 'cfp/submission_email.html'
+    success_url = '/submissions'
+
+    def form_valid(self, form):
+        form.send_email()
+        return super(SubmissionEmail, self).form_valid(form)
 
 
 class CallCreate(CreateView):

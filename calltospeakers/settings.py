@@ -100,6 +100,8 @@ class Common(Configuration):
     SOCIAL_AUTH_TWITTER_KEY = values.Value()
     SOCIAL_AUTH_TWITTER_SECRET = values.Value()
 
+    MAILGUN_KEY = values.Value()
+
     AUTHENTICATION_BACKENDS = (
         #'social.backends.twitter.TwitterOAuth',
         'social.backends.github.GithubOAuth2',
