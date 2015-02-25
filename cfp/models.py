@@ -58,7 +58,7 @@ class Conference(models.Model):
         if (self.end - self.start).days == 0:
             return self.start.strftime("%b %d, %Y")
         return "{} - {}".format(self.start.strftime("%b %d"),
-                                self.start.strftime("%d, %Y"))
+                                self.end.strftime("%d, %Y"))
 
     def get_absolute_url(self):
         return reverse('call_read', args=[self.slug, self.start.year])
