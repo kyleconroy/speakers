@@ -66,6 +66,7 @@ def create_forms_and_submissions(apps, schema_editor):
     Submission = apps.get_model("formbuilder", "Submission")
 
     for talk in Talk.objects.all():
+        print(talk.title)
         sub = Submission(form=talk.call.form)
         sub.save()
 
