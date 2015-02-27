@@ -1,20 +1,12 @@
 from django.contrib import admin
 
-from cfp.models import Call, Conference, Track, Profile, Talk, Format
+from cfp.models import Call, Conference, Profile, Talk
 
 
 class CallInline(admin.StackedInline):
     model = Call
     extra = 0
     readonly_fields = ('state',)
-
-
-class TrackInline(admin.StackedInline):
-    model = Track
-
-
-class FormatInline(admin.StackedInline):
-    model = Format
 
 
 def make_all_approved(modeladmin, request, queryset):
@@ -37,8 +29,6 @@ make_all_rejected.short_description = "Mark selected calls as rejected"
 class ConferenceAdmin(admin.ModelAdmin):
     inlines = [
         CallInline,
-        TrackInline,
-        FormatInline,
     ]
     list_filter = ('call__state', 'created')
     list_display = ('name', 'start', 'end', 'created')
@@ -96,13 +86,3 @@ class TalkAdmin(admin.ModelAdmin):
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('name', 'email_address',
                     'owner', 'created')
-
-
-@admin.register(Track)
-class TrackAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(Format)
-class FormatAdmin(admin.ModelAdmin):
-    pass

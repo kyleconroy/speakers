@@ -81,10 +81,6 @@ class Call(models.Model):
     state = FSMField(default='new', protected=True, db_index=True)
     form = models.ForeignKey('formbuilder.Form', null=True)
 
-    # These fields are used for the submission form,
-    # probably want to do something better here in the future
-    needs_audience = models.BooleanField(default=False)
-
     # If true, we'll show the form on the website. Otherwise
     # just post a link to the talk
     hosted = models.BooleanField(default=False)
@@ -122,35 +118,13 @@ class Call(models.Model):
         pass
 
 
-class Track(models.Model):
-    conference = models.ForeignKey('Conference')
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
-
-
-class Format(models.Model):
-    conference = models.ForeignKey('Conference')
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
-
-LEVELS = ((1, 'Beginner'), (2, 'Intermidiate'), (3, 'Advancded'))
-
-
 class Talk(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     submission = models.ForeignKey('formbuilder.Submission', null=True)
     token = models.CharField(max_length=15, unique=True)
     title = models.CharField(max_length=300)
-    track = models.ForeignKey('Track', null=True, blank=True)
-    format = models.ForeignKey('Format', null=True, blank=True)
     call = models.ForeignKey('Call')
     profile = models.ForeignKey('Profile')
-    abstract = models.TextField()
-    audience = models.IntegerField(choices=LEVELS, default=1, blank=True)
     state = FSMField(default='new', protected=True, db_index=True)
 
     def __str__(self):

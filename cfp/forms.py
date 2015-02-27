@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.forms.widgets import Select
 
-from cfp.models import Talk, Profile
+from cfp.models import Profile
 
 
 def parse_handle(handle):
@@ -64,12 +64,6 @@ class AuthenticationForm(forms.Form):
                     code='inactive',
                 )
         return self.cleaned_data
-
-
-class TalkForm(forms.ModelForm):
-    class Meta:
-        model = Talk
-        fields = ('title', 'abstract', 'track', 'format', 'audience')
 
 
 class ProfileForm(forms.ModelForm):
