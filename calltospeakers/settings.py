@@ -43,6 +43,7 @@ class Common(Configuration):
 
         'social.apps.django_app.default',
         'markdown_deux',
+        'formbuilder',
         'cfp',
     )
 
