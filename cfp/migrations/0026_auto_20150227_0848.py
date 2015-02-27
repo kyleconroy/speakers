@@ -83,13 +83,13 @@ def create_forms_and_submissions(apps, schema_editor):
                     value=talk.abstract
                 )
 
-            if field.name == 'track':
+            if field.name == 'track' and talk.track:
                 sub.entry_set.create(
                     field=field,
                     value=talk.track.name,
                 )
 
-            if field.name == 'audience':
+            if field.name == 'audience' and talk.audience:
                 levels = dict([
                     (1, 'Beginner'),
                     (2, 'Intermidiate'),
@@ -100,7 +100,7 @@ def create_forms_and_submissions(apps, schema_editor):
                     field=field,
                     value=levels.get(talk.audience, 'Beginner'),
                 )
-            if field.name == 'format':
+            if field.name == 'format' and talk.format:
                 sub.entry_set.create(
                     field=field,
                     value=talk.format.name,
