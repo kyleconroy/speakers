@@ -79,6 +79,7 @@ class Call(models.Model):
     application_url = models.URLField(max_length=1000, blank=True)
     tweet_id = models.BigIntegerField(db_index=True, default=0)
     state = FSMField(default='new', protected=True, db_index=True)
+    form = models.ForeignKey('formbuilder.Form', null=True)
 
     # These fields are used for the submission form,
     # probably want to do something better here in the future
@@ -141,6 +142,7 @@ LEVELS = ((1, 'Beginner'), (2, 'Intermidiate'), (3, 'Advancded'))
 
 class Talk(models.Model):
     created = models.DateTimeField(auto_now_add=True)
+    submission = models.ForeignKey('formbuilder.Submission', null=True)
     token = models.CharField(max_length=15, unique=True)
     title = models.CharField(max_length=300)
     track = models.ForeignKey('Track', null=True, blank=True)

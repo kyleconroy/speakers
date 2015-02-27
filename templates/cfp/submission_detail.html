@@ -6,7 +6,12 @@
 
 <h2>Talk</h2>
 <div class="form">
-  {{ talkform.as_p }}
+  {% for entry in talk.submission.entry_set.all %}
+  <p>
+    <label>{{ entry.field.pretty_name }}</label>
+    <input type="text" value="{{ entry.value }}">
+  </p>
+  {% endfor %}
 </div>
 
 <h2>Profile</h2>

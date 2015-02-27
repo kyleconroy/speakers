@@ -19,9 +19,9 @@ from django.shortcuts import redirect, render
 from django.utils.text import slugify
 from django.http import HttpResponseRedirect
 
-from cfp.models import Call, Conference, Track, Talk, Profile, token, Format
+from cfp.models import Call, Conference, Talk, Profile, token
 from cfp.forms import UserCreationForm, AuthenticationForm, parse_handle
-from cfp.forms import TalkForm, ProfileForm, ReadOnlyForm, EmailSubmissionForm
+from cfp.forms import ProfileForm, ReadOnlyForm, EmailSubmissionForm
 
 CONFERENCE_FIELDS = (
     'name',
@@ -106,11 +106,9 @@ class SubmissionDetail(StaffRequiredMixin, DetailView):
 
     def get_context_data(self, object=None):
         context = super(SubmissionDetail, self).get_context_data()
-        talk = modelform_factory(Talk, form=ReadOnlyForm, exclude=('call',))
         prof = modelform_factory(Profile, form=ReadOnlyForm, exclude=('id',))
         call = modelform_factory(Call, form=ReadOnlyForm, exclude=('id',))
 
-        context['talkform'] = talk(instance=self.object)
         context['profform'] = prof(instance=self.object.profile)
         context['callform'] = call(instance=self.object.call)
         return context
@@ -183,43 +181,47 @@ def call_detail_and_form(request, slug, year):
     call = get_object_or_404(Call, conference__start__year=year,
                              conference__slug=slug,
                              state='approved')
+    if call.form is None:
+        return render(request, 'cfp/call_detail.html', {'call': call})
+
+    form_class = call.form.form_class()
 
     if request.method == 'POST' and not call.is_open():
         messages.error(request, "Talk submission is closed.")
         profile_form = ProfileForm()
-        form = TalkForm()
+        cfp_form = form_class()
     elif request.method == 'POST' and request.user.is_authenticated():
-        form = TalkForm(request.POST)
-        if form.is_valid():
-            if not form.instance.audience:
-                form.instance.audience = 1
+        cfp_form = form_class(request.POST)
+        if cfp_form.is_valid():
             with transaction.atomic():
                 profile = Profile.generate(request.user)
                 profile.save()
-                form.instance.token = token(15)
-                form.instance.call = call
-                form.instance.profile = profile
-                form.save()
+                sub = call.form.submit(cfp_form)
+                talk = Talk(call=call, profile=profile, submission=sub,
+                            token=token(15),
+                            title=cfp_form.cleaned_data['title'])
+                talk.save()
             messages.success(request, "Talk successfully submitted. You rock!")
             return HttpResponseRedirect(call.get_absolute_url())
 
     elif request.method == 'POST':
-        form = TalkForm(request.POST)
+        cfp_form = form_class(request.POST)
         profile_form = ProfileForm(request.POST)
-        if form.is_valid() and profile_form.is_valid():
-            if not form.instance.audience:
-                form.instance.audience = 1
+        if cfp_form.is_valid() and profile_form.is_valid():
             with transaction.atomic():
-                form.instance.token = token(15)
-                form.instance.call = call
-                form.instance.profile = profile_form.save()
-                form.save()
+                profile = profile_form.save()
+                sub = call.form.submit(cfp_form)
+                talk = Talk(call=call, profile=profile, submission=sub,
+                            token=token(15),
+                            title=cfp_form.cleaned_data['title'])
+                talk.save()
+
             messages.success(request, "Talk successfully submitted. You rock!")
             return HttpResponseRedirect(call.get_absolute_url())
 
     else:
         profile_form = ProfileForm()
-        form = TalkForm()
+        cfp_form = form_class()
 
     context = {'call': call}
 
@@ -230,22 +232,7 @@ def call_detail_and_form(request, slug, year):
     if not request.user.is_authenticated():
         context['profile_form'] = profile_form
 
-    form.fields['track'].queryset = \
-        Track.objects.filter(conference=call.conference.id)
-
-    if form.fields['track'].queryset.count() == 0:
-        del form.fields['track']
-
-    form.fields['format'].queryset = \
-        Format.objects.filter(conference=call.conference.id)
-
-    if form.fields['format'].queryset.count() == 0:
-        del form.fields['format']
-
-    if not call.needs_audience:
-        del form.fields['audience']
-
-    context['form'] = form
+    context['form'] = cfp_form
 
     return render(request, 'cfp/call_detail.html', context)
 

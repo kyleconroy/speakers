@@ -149,6 +149,9 @@ class Field(models.Model):
         field.field = self
         return field
 
+    def pretty_name(self):
+        return self.label or self.name.replace('_', ' ').capitalize()
+
     class Meta:
         unique_together = ("form", "name")
 
