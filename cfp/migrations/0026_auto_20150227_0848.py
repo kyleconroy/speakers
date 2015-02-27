@@ -12,11 +12,6 @@ def create_forms_and_submissions(apps, schema_editor):
 
     for call in Call.objects.filter(state='approved'):
         conference = call.conference
-
-        if not (call.hosted or 'docs.google.com' in call.application_url
-                or 'typeform.com' in call.application_url):
-            continue
-
         form = Form(name="{} CFP Form".format(conference.name))
         form.save()
 
