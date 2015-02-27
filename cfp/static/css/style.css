@@ -478,13 +478,21 @@ body {
   width: 100%;
 }
 
-.errorlist {
+
+.form > ul {
   padding: 0;
   maring: 0;
   margin: 0;
+  list-style-type: none;
+}
+
+.form > ul > li {
+  padding: 4px;
+}
+
+.errorlist {
   font-size: 10px;
   text-transform: uppercase;
-  list-style-type: none;
   color: red;
 }
 
