@@ -96,6 +96,7 @@ class Field(models.Model):
     DATE_INPUT = 6
     DATE_TIME_INPUT = 7
     TIME_INPUT = 8
+    RADIOSELECT = 9
     WIDGETS = (
         (0, 'Default widget'),
         (TEXTAREA, 'Textarea'),
@@ -106,6 +107,7 @@ class Field(models.Model):
         (DATE_INPUT, 'DateInput'),
         (DATE_TIME_INPUT, 'DateTimeInput'),
         (TIME_INPUT, 'TimeInput'),
+        (RADIOSELECT, 'RadioSelect'),
     )
 
     form = models.ForeignKey(Form)
