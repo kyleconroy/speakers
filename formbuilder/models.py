@@ -146,6 +146,7 @@ class Field(models.Model):
             required=self.required,
             widget=self.get_widget_class(),
             help_text=self.help_text,
+            label=self.label or None,
         )
         field.choices = self.choices()
         field.field = self
