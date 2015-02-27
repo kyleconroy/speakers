@@ -181,7 +181,8 @@ def call_detail_and_form(request, slug, year):
     call = get_object_or_404(Call, conference__start__year=year,
                              conference__slug=slug,
                              state='approved')
-    if call.form is None:
+
+    if call.form is None or not call.hosted:
         return render(request, 'cfp/call_detail.html', {'call': call})
 
     form_class = call.form.form_class()
