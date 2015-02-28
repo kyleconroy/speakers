@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from cfp.models import Call, Conference, Profile, Talk
+from cfp.models import Call, Conference, Profile, Talk, Topic
 
 
 class CallInline(admin.StackedInline):
@@ -86,3 +86,8 @@ class TalkAdmin(admin.ModelAdmin):
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('name', 'email_address',
                     'owner', 'created')
+
+
+@admin.register(Topic)
+class Topic(admin.ModelAdmin):
+    pass

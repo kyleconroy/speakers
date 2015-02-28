@@ -35,7 +35,6 @@ CONFERENCE_FIELDS = (
     'twitter_hashtag',
     'venue_name',
     'venue_address',
-    'programming_language',
     'city',
     'state',
     'country',
@@ -239,7 +238,7 @@ def call_detail_and_form(request, slug, year):
 
 
 def tokenize_query(search):
-    groups = re.findall('([\'"].*?[\'"])|(\w+)', search)
+    groups = re.findall('([\'"].*?[\'"])|([\w:]+)', search)
     return [x.replace("'", "").replace('"', "").strip() for x
             in list(itertools.chain(*groups)) if x]
 
@@ -247,7 +246,14 @@ def tokenize_query(search):
 def sanitize_query(search):
     search = search.strip()
     search = re.sub('[\?\|!\*]', '', search)
-    return '&'.join(["'{}'".format(x) for x in tokenize_query(search)])
+    tokens = tokenize_query(search)
+    return '&'.join(["'{}'".format(x) for x in tokens if ':' not in x])
+
+
+def filters(search):
+    search = search.strip()
+    search = re.sub('[\?\|!\*]', '', search)
+    return [t.split(':') for t in tokenize_query(search) if ':' in t]
 
 
 class CallList(ListView):
@@ -262,13 +268,18 @@ class CallList(ListView):
 
         q = self.request.GET.get('q')
         if q:
-            ids = Conference.objects.values_list('id', flat=True).extra(
-                where=[
-                    "cfp_conference.fts_document @@ to_tsquery('simple', %s)"
-                ],
-                params=[sanitize_query(q)]
-            )
-            qs = qs.filter(conference__in=set(ids))
+            search = sanitize_query(q)
+            sql = "cfp_conference.fts_document @@ to_tsquery('simple', %s)"
+
+            if search:
+                ids = Conference.objects.values_list('id', flat=True).extra(
+                    where=[sql], params=[search]
+                )
+                qs = qs.filter(conference__in=set(ids))
+
+            for key, value in filters(q):
+                if key == 'location':
+                    qs = qs.filter(conference__country=value.upper())
 
         return qs.order_by('end')
 

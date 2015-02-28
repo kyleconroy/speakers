@@ -36,3 +36,11 @@ class SearchTest(TestCase):
 
     def test_whitespace(self):
         self.assertEquals(['hello'], views.tokenize_query("    hello "))
+
+    def test_colons(self):
+        self.assertEquals(['foo', 'location:us', 'topic:python'],
+                          views.tokenize_query("foo location:us topic:python"))
+
+    def test_filters(self):
+        self.assertEquals([['location', 'us'], ['topic', 'python']],
+                          views.filters("foo location:us topic:python"))
