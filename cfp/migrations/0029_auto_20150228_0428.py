@@ -11,7 +11,7 @@ def create_topics(apps, schema_editor):
     Conference = apps.get_model("cfp", "Conference")
 
     for conf in Conference.objects.exclude(programming_language=''):
-        topic = Topic.object.get_or_create(value=conf.programming_language)
+        topic = Topic.objects.get_or_create(value=conf.programming_language)
         conf.topics.add(topic)
 
 
