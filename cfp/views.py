@@ -280,6 +280,8 @@ class CallList(ListView):
             for key, value in filters(q):
                 if key == 'location':
                     qs = qs.filter(conference__country=value.upper())
+                if key == 'topic':
+                    qs = qs.filter(conference__topics__value=value.title())
 
         return qs.order_by('end')
 

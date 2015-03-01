@@ -18,6 +18,7 @@ def token(size):
 
 class Topic(models.Model):
     value = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, default='')
 
 
 class Conference(models.Model):
