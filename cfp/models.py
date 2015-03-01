@@ -20,6 +20,9 @@ class Topic(models.Model):
     value = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=100, default='')
 
+    def __str__(self):
+        return self.name
+
 
 class Conference(models.Model):
     created = models.DateTimeField(auto_now_add=True)
