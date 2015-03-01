@@ -34,7 +34,7 @@ class Conference(models.Model):
     venue_name = models.CharField(max_length=100, blank=True)
     venue_address = models.CharField(max_length=255, blank=True)
     city = models.CharField(max_length=100)
-    country = CountryField(default='US')
+    country = CountryField(default='US', db_index=True)
     state = models.CharField(max_length=100, blank=True)
 
     tagline = models.CharField(max_length=255)
@@ -74,7 +74,7 @@ class Conference(models.Model):
 
 class Call(models.Model):
     conference = models.ForeignKey('Conference')
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
     description = models.TextField(blank=True)
     start = models.DateField(db_index=True)
     end = models.DateField(db_index=True)
