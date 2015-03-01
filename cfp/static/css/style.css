@@ -643,14 +643,30 @@ body {
 
 #search {
   display: flex;
+  flex-wrap: wrap;
   background: #eee;
   padding: 10px;
+  align-items: center;
+  font-size: 14px;
 }
 
-#search .searchbar {
-  display: block;
-  flex: 1;
+#searchbtn {
+  font-size: 18px;
+}
+
+#search input, #search label {
+  margin: 5px;
+}
+
+#search input[type=select], #search label,
+#search input[type=submit] {
+  min-width: 40px;
+}
+
+#id_q {
   padding: 2px;
+  flex: 1;
+  min-width: 300px;
   font-size: 18px;
 }
   

@@ -105,3 +105,17 @@ class EmailSubmissionForm(forms.Form):
                 "h:Reply-To": self.cleaned_data['presenter_email'],
             })
         resp.raise_for_status()
+
+
+class SearchForm(forms.Form):
+    q = forms.CharField(max_length=254, required=False, label='')
+    location = forms.ChoiceField(choices=(
+        ('', 'Any'),
+    ), required=False)
+    topic = forms.ChoiceField(choices=(
+        ('', 'Any'),
+    ), required=False)
+    sort = forms.ChoiceField(choices=(
+        ('closing', 'Closing'),
+        ('newest', 'Newest'),
+    ), required=False)

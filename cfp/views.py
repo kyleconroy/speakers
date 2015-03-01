@@ -19,9 +19,12 @@ from django.shortcuts import redirect, render
 from django.utils.text import slugify
 from django.http import HttpResponseRedirect
 
+from django_countries import countries
+
 from cfp.models import Call, Conference, Talk, Profile, token
 from cfp.forms import UserCreationForm, AuthenticationForm, parse_handle
 from cfp.forms import ProfileForm, ReadOnlyForm, EmailSubmissionForm
+from cfp.forms import SearchForm
 
 CONFERENCE_FIELDS = (
     'name',
@@ -266,28 +269,50 @@ class CallList(ListView):
                        start__lte=datetime.utcnow(),
                        end__gte=datetime.utcnow())
 
-        q = self.request.GET.get('q')
+        locations = [('', 'Any')]
+        for c in sorted(set(qs.values_list('conference__country', flat=True))):
+            locations.append((c.lower(), dict(countries)[c]))
+
+        topics = list(set(qs.values_list('conference__topics__value',
+                                         'conference__topics__name')))
+        topics = sorted((k, v) for k, v in topics if k is not None)
+        topics.insert(0, ('', 'Any'))
+
+        self.search = SearchForm(self.request.GET)
+        self.search.fields['location'].choices = locations
+        self.search.fields['topic'].choices = topics
+
+        if not self.search.is_valid():
+            print('INVALID')
+            return qs.order_by('end')
+
+        location = self.search.cleaned_data['location']
+        sort = self.search.cleaned_data['sort']
+        topic = self.search.cleaned_data['topic']
+        q = sanitize_query(self.search.cleaned_data['q'])
+
         if q:
-            search = sanitize_query(q)
             sql = "cfp_conference.fts_document @@ to_tsquery('simple', %s)"
+            ids = Conference.objects.values_list('id', flat=True).extra(
+                where=[sql], params=[q],
+            )
+            qs = qs.filter(conference__in=set(ids))
 
-            if search:
-                ids = Conference.objects.values_list('id', flat=True).extra(
-                    where=[sql], params=[search]
-                )
-                qs = qs.filter(conference__in=set(ids))
+        if location:
+            qs = qs.filter(conference__country=location.upper())
 
-            for key, value in filters(q):
-                if key == 'location':
-                    qs = qs.filter(conference__country=value.upper())
-                if key == 'topic':
-                    qs = qs.filter(conference__topics__value=value.title())
+        if topic:
+            qs = qs.filter(conference__topics__value=topic.lower())
 
-        return qs.order_by('end')
+        if sort == 'newest':
+            return qs.order_by('-created')
+        else:
+            return qs.order_by('end')
 
     def get_context_data(self):
         context = super(CallList, self).get_context_data()
         context['query'] = self.request.GET.get('q') or ""
+        context['search'] = self.search
         return context
 
 
