@@ -269,6 +269,7 @@ class CallList(ListView):
                        start__lte=datetime.utcnow(),
                        end__gte=datetime.utcnow())
 
+        # TODO: Cache these values
         locations = [('', 'Any')]
         for c in sorted(set(qs.values_list('conference__country', flat=True))):
             locations.append((c.lower(), dict(countries)[c]))
@@ -283,7 +284,6 @@ class CallList(ListView):
         self.search.fields['topic'].choices = topics
 
         if not self.search.is_valid():
-            print('INVALID')
             return qs.order_by('end')
 
         location = self.search.cleaned_data['location']

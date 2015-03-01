@@ -42,7 +42,7 @@ class Conference(models.Model):
 
     twitter_handle = models.CharField(max_length=20, blank=True)
     twitter_hashtag = models.CharField(max_length=20, blank=True)
-    topics = models.ManyToManyField(Topic)
+    topics = models.ManyToManyField(Topic, blank=True)
 
     start = models.DateField(db_index=True)
     end = models.DateField(db_index=True)
