@@ -97,6 +97,7 @@ class Field(models.Model):
     DATE_TIME_INPUT = 7
     TIME_INPUT = 8
     RADIOSELECT = 9
+    CHECKBOX_SELECT_MULTIPLE = 10
     WIDGETS = (
         (0, 'Default widget'),
         (TEXTAREA, 'Textarea'),
@@ -108,6 +109,7 @@ class Field(models.Model):
         (DATE_TIME_INPUT, 'DateTimeInput'),
         (TIME_INPUT, 'TimeInput'),
         (RADIOSELECT, 'RadioSelect'),
+        (CHECKBOX_SELECT_MULTIPLE, 'CheckboxSelectMultiple'),
     )
 
     form = models.ForeignKey(Form)
