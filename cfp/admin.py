@@ -80,6 +80,7 @@ class TalkAdmin(admin.ModelAdmin):
     list_filter = ('state', 'created')
     list_display = ('title', 'call', 'profile', 'created', 'state')
     actions = [make_submitted]
+    search_fields = ('title', 'token')
 
 
 @admin.register(Profile)
