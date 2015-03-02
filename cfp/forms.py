@@ -111,11 +111,11 @@ class SearchForm(forms.Form):
     q = forms.CharField(max_length=254, required=False, label='')
     location = forms.ChoiceField(choices=(
         ('', 'Any'),
-    ), required=False)
+    ), required=False, label='')
     topic = forms.ChoiceField(choices=(
         ('', 'Any'),
-    ), required=False)
+    ), required=False, label='')
     sort = forms.ChoiceField(choices=(
-        ('closing', 'Closing'),
-        ('newest', 'Newest'),
-    ), required=False)
+        ('closing', 'By closing'),
+        ('newest', 'By newest'),
+    ), required=False, label='')

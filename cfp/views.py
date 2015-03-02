@@ -270,14 +270,14 @@ class CallList(ListView):
                        end__gte=datetime.utcnow())
 
         # TODO: Cache these values
-        locations = [('', 'Any')]
+        locations = [('', 'Any country')]
         for c in sorted(set(qs.values_list('conference__country', flat=True))):
             locations.append((c.lower(), dict(countries)[c]))
 
         topics = list(set(qs.values_list('conference__topics__value',
                                          'conference__topics__name')))
         topics = sorted((k, v) for k, v in topics if k is not None)
-        topics.insert(0, ('', 'Any'))
+        topics.insert(0, ('', 'Any topic'))
 
         self.search = SearchForm(self.request.GET)
         self.search.fields['location'].choices = locations

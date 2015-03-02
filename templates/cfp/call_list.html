@@ -8,8 +8,15 @@
 </div>
 {% endif %}
 <form id="search" action="" method="get">
-  {{ search }}
+  <div id="search-bar">
+  {{ search.q }}
   <input id="searchbtn" type="submit" value="Search">
+  </div>
+  <div id="search-filters">
+  {{ search.location }}
+  {{ search.topic }}
+  {{ search.sort }}
+  </div>
 </form>
 <ul id="conferences" class="table-list">
   <li class="table-list-header">

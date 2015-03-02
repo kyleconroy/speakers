@@ -654,22 +654,25 @@ body {
   font-size: 18px;
 }
 
-#search input, #search label {
+#search input, #search select {
   margin: 5px;
 }
 
-#search input[type=select], #search label,
-#search input[type=submit] {
-  min-width: 40px;
+#search select,
+#search input[type=text] {
+  flex: 1;
 }
 
-#id_q {
-  padding: 2px;
-  flex: 1;
-  min-width: 300px;
-  font-size: 18px;
+#search-bar {
+  display: flex;
+  flex: 3 1 400px;
 }
-  
+
+#search-filters {
+  display: flex;
+  flex: 2 1 400px;
+}
+   
 @media screen and (min-width: 568px) {
   .table-list-header {
     display: table-row;
