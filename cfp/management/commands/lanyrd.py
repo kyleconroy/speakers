@@ -9,6 +9,7 @@ import html2text
 import requests
 
 from cfp.models import Call, Conference
+from formbuilder.models import Form
 
 
 def normalize_handle(handle):
@@ -203,5 +204,10 @@ class Command(BaseCommand):
 
             with transaction.atomic():
                 conf.save()
+
+                form = Form(name=conf.name)
+                form.save()
+                form.field_set.create(name='title', required=True)
+
                 call.conference = conf
                 call.save()
