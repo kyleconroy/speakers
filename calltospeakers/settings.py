@@ -123,6 +123,8 @@ class Development(Common):
         'debug_toolbar',
     )
 
+    TEST_RUNNER = 'calltospeakers.tests.RoadRunner'
+
 
 class Production(Common):
     """
