@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
@@ -26,9 +27,35 @@ class FieldInline(EditLinkToInlineObject, admin.StackedInline):
         return qs.order_by('order')
 
 
+@transaction.atomic
+def clone(modeladmin, request, queryset):
+    fields = []
+    for form in queryset.all():
+        fields = form.field_set.all()
+
+        form.pk = None
+        form.name += " (clone)"
+        form.save()
+
+        for field in fields:
+            options = field.option_set.all()
+
+            field.pk = None
+            field.form = form
+            field.save()
+
+            for option in options:
+                option.pk = None
+                option.field = field
+                option.save()
+clone.short_description = "Clone form"
+
+
 @admin.register(models.Form)
-class ConferenceAdmin(admin.ModelAdmin):
+class FormAdmin(admin.ModelAdmin):
     inlines = [FieldInline]
+    actions = [clone]
+    list_display = ('name', 'created',)
 
 
 class OptionInline(admin.StackedInline):

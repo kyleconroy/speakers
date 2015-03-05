@@ -5,6 +5,7 @@ from django import forms
 
 
 class Form(models.Model):
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
     name = models.CharField(max_length=255)
 
     def __str__(self):
