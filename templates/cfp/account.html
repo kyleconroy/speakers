@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="settings">
+  <nav id="settings-menu" class="sidebar">
+    <h2 class="title">Your Account</h2>
+    <ul>
+      <li>
+        <a {% if selected == 'profile' %}class="selected"{% endif %} href="{% url 'profile' %}">
+          Profile</a></li>
+      <li>
+        <a {% if selected == 'submitted' %}class="selected"{% endif %} href="{% url 'talk_list' %}">
+          Submitted Talks</a></li>
+      <li>
+        <a {% if selected == 'tracking' %}class="selected"{% endif %} href="{% url 'tracked_list' %}">
+          Tracked Conferences</a></li>
+    </ul>
+  </nav>
+  <div id="settings-content">
+    {% block settings %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

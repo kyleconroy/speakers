@@ -59,7 +59,15 @@ urlpatterns = [
         views.ProfileEdit.as_view(),
         name='profile'),
     url(
-        r'^talks/(?P<pk>\d+)$',
+        r'^account/watching$',
+        views.TrackedConferenceList.as_view(),
+        name='tracked_list'),
+    url(
+        r'^account/talks$',
+        views.TalkList.as_view(),
+        name='talk_list'),
+    url(
+        r'^account/talks/(?P<pk>\d+)$',
         views.TalkDetail.as_view(),
         name='talk_read'),
     url(
@@ -79,6 +87,10 @@ urlpatterns = [
         r'^(?P<year>\d+)/(?P<slug>[\w-]+)$',
         views.legacy,
         name='legacy_redirect'),
+    url(
+        r'^(?P<slug>[\w-]+)/(?P<year>\d+)/track$',
+        views.track_conference,
+        name='track'),
     url(
         r'^(?P<slug>[\w-]+)/(?P<year>\d+)/call/new$',
         views.CallCreate.as_view(),

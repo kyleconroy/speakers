@@ -1,0 +1,13 @@
+{% extends "cfp/account.html" %}
+
+{% block title %}Your talks{% endblock %}
+
+
+{% block settings %}
+<h2>Submitted Talks</h2>
+<ul>
+  {% for talk in talks %}
+  <li><a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}

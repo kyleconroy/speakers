@@ -791,3 +791,65 @@ body {
   border: 0;
   flex: 1;
 }
+
+/* ACCOUNT */
+#settings {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#settings-menu {
+  flex: 1 1 150px;
+}
+
+.sidebar ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+.sidebar ul li {
+  border-bottom: 1px solid #ddd;
+}
+
+.sidebar ul li a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #000;
+}
+
+.sidebar ul li a:hover {
+  background: #eee;
+}
+
+.sidebar ul li a.selected {
+  border-left: 5px solid #666;
+  padding-left: 5px;
+}
+
+
+#settings-content {
+  flex: 5 1 500px;
+  padding: 0 10px;
+}
+
+#settings-content h2 {
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+h2.title {
+  border-radius: 5px 5px 0 0;
+  background: #eee;
+  margin: 0px;
+  font-size: 18px;
+  padding: 10px;
+}
+
+.tracked {
+  background: #35e466;
+  padding: 10px;
+  border-radius: 5px;
+  display: inline-block;
+}

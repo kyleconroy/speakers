@@ -106,8 +106,8 @@ class SubmissionDetail(StaffRequiredMixin, DetailView):
     model = Talk
     template_name = 'cfp/submission_detail.html'
 
-    def get_context_data(self, object=None):
-        context = super(SubmissionDetail, self).get_context_data()
+    def get_context_data(self, **kwargs):
+        context = super(SubmissionDetail, self).get_context_data(**kwargs)
         prof = modelform_factory(Profile, form=ReadOnlyForm, exclude=('id',))
         call = modelform_factory(Call, form=ReadOnlyForm, exclude=('id',))
 
@@ -161,6 +161,11 @@ class ProfileEdit(LoginRequiredMixin, UpdateView):
             profile.save()
         return profile
 
+    def get_context_data(self, **kwargs):
+        context = super(ProfileEdit, self).get_context_data(**kwargs)
+        context['selected'] = 'profile'
+        return context
+
 
 class CallEdit(StaffRequiredMixin, UpdateView):
     model = Call
@@ -183,9 +188,14 @@ def call_detail_and_form(request, slug, year):
     call = get_object_or_404(Call, conference__start__year=year,
                              conference__slug=slug,
                              state='approved')
+    context = {'call': call}
+
+    if request.user.is_authenticated():
+        context['tracking'] = request.user.conference_set.\
+            filter(id=call.conference.id).exists()
 
     if call.form is None or not call.hosted:
-        return render(request, 'cfp/call_detail.html', {'call': call})
+        return render(request, 'cfp/call_detail.html', context)
 
     form_class = call.form.form_class()
 
@@ -238,6 +248,16 @@ def call_detail_and_form(request, slug, year):
     context['form'] = cfp_form
 
     return render(request, 'cfp/call_detail.html', context)
+
+
+@login_required
+def track_conference(request, slug, year):
+    conf = get_object_or_404(Conference, slug=slug, start__year=year)
+
+    if not request.user.conference_set.filter(id=conf.id).exists():
+        conf.watchers.add(request.user)
+
+    return HttpResponseRedirect(conf.get_absolute_url())
 
 
 def tokenize_query(search):
@@ -309,8 +329,8 @@ class CallList(ListView):
         else:
             return qs.order_by('end')
 
-    def get_context_data(self):
-        context = super(CallList, self).get_context_data()
+    def get_context_data(self, **kwargs):
+        context = super(CallList, self).get_context_data(**kwargs)
         context['query'] = self.request.GET.get('q') or ""
         context['search'] = self.search
         return context
@@ -327,6 +347,25 @@ class TalkDetail(LoginRequiredMixin, DetailView):
         if obj.profile.owner.id != self.request.user.id:
             raise PermissionDenied()
         return obj
+
+    def get_context_data(self, **kwargs):
+        context = super(TalkDetail, self).get_context_data(**kwargs)
+        context['selected'] = 'submitted'
+        return context
+
+
+class TalkList(ListView):
+    model = Talk
+    context_object_name = 'talks'
+
+    def get_queryset(self):
+        qs = super(TalkList, self).get_queryset()
+        return qs.filter(profile__owner=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super(TalkList, self).get_context_data(**kwargs)
+        context['selected'] = 'submitted'
+        return context
 
 
 class LatestCallsFeed(Feed):
@@ -372,3 +411,18 @@ class LoginView(FormView):
     def form_valid(self, form):
         login(self.request, form.user_cache)
         return super(LoginView, self).form_valid(form)
+
+
+class TrackedConferenceList(LoginRequiredMixin, ListView):
+    template_name = 'cfp/tracked_list.html'
+    model = Conference
+    context_object_name = 'confs'
+
+    def get_queryset(self):
+        qs = super(TrackedConferenceList, self).get_queryset()
+        return qs.filter(watchers=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super(TrackedConferenceList, self).get_context_data(**kwargs)
+        context['selected'] = 'tracking'
+        return context

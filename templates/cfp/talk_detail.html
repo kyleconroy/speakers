@@ -1,12 +1,12 @@
-{% extends "base.html" %}
+{% extends "cfp/account.html" %}
 
-{% block content %}
-<h3>{{ talk.title }}</h3>
-<p>Submitted to <a href="{{ talk.call.get_absolute_url }}">{{talk.call}}</a></p>
-<dl>
-  {% for entry in talk.submission.entry_set.all %}
-  <dt>{{ entry.field.pretty_name }}</dt>
-  <dd>{{ entry.value }}</dd>
-  {% endfor %}
-</dl>
+{% block settings %}
+<h2>{{ talk.title }}</h2>
+<p>Submitted to <a href="{{ talk.call.get_absolute_url }}">{{talk.call}}</a> 
+  on {{ talk.created }}
+</p>
+{% for entry in talk.submission.entry_set.all %}
+<h3>{{ entry.field.pretty_name }}</h3>
+<p>{{ entry.value }}</p>
+{% endfor %}
 {% endblock %}

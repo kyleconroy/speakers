@@ -44,6 +44,8 @@ class Conference(models.Model):
     twitter_hashtag = models.CharField(max_length=20, blank=True)
     topics = models.ManyToManyField(Topic, blank=True)
 
+    watchers = models.ManyToManyField(User, blank=True)
+
     start = models.DateField(db_index=True)
     end = models.DateField(db_index=True)
 
@@ -66,6 +68,9 @@ class Conference(models.Model):
 
     def get_absolute_url(self):
         return reverse('call_read', args=[self.slug, self.start.year])
+
+    def get_track_url(self):
+        return reverse('track', args=[self.slug, self.start.year])
 
     class Meta:
         unique_together = ('slug', 'start')
