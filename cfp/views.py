@@ -279,6 +279,11 @@ def save_search(request):
             country=form.cleaned_data['location'].upper(),
             topic=topic,
         )
+        if created:
+            messages.success(
+                request,
+                "Search successfully saved. Your future self thanks you.")
+
         return HttpResponseRedirect(ss.get_absolute_url())
     return HttpResponseRedirect('/')
 
