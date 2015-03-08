@@ -12,8 +12,8 @@
         <a {% if selected == 'submitted' %}class="selected"{% endif %} href="{% url 'talk_list' %}">
           Submitted Talks</a></li>
       <li>
-        <a {% if selected == 'tracking' %}class="selected"{% endif %} href="{% url 'tracked_list' %}">
-          Tracked Conferences</a></li>
+        <a {% if selected == 'searches' %}class="selected"{% endif %} href="{% url 'search_list' %}">
+          Saved Searches</a></li>
     </ul>
   </nav>
   <div id="settings-content">

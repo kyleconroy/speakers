@@ -1,0 +1,13 @@
+{% extends "cfp/account.html" %}
+
+{% block title %}Your saved searches{% endblock %}
+
+
+{% block settings %}
+<h2>Saved searches</h2>
+<ul>
+  {% for search in searches %}
+  <li><a href="{{ search.get_absolute_url }}">{{ search|title }}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}

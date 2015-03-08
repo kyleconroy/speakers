@@ -312,6 +312,7 @@ class CallList(ListView):
         sort = self.search.cleaned_data['sort']
         topic = self.search.cleaned_data['topic']
         q = self.search.cleaned_data['q']
+        found_topic = Topic.objects.filter(value=topic).first()
 
         qs = search.results(queryset=qs, q=q, location=location, topic=topic)
 
@@ -319,15 +320,14 @@ class CallList(ListView):
             owner=self.request.user,
             q=q,
             country=location.upper(),
-            topic__value=topic,
+            topic=found_topic,
         ).first()
 
         if self.saved_search is None:
-            topic = Topic.objects.filter(value=topic).first()
             self.saved_search = SavedSearch(
                 q=q,
                 country=location.upper(),
-                topic=topic,
+                topic=found_topic,
             )
 
         if sort == 'newest':
@@ -432,4 +432,19 @@ class TrackedConferenceList(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(TrackedConferenceList, self).get_context_data(**kwargs)
         context['selected'] = 'tracking'
+        return context
+
+
+class SavedSearchList(LoginRequiredMixin, ListView):
+    template_name = 'cfp/search_list.html'
+    model = SavedSearch
+    context_object_name = 'searches'
+
+    def get_queryset(self):
+        qs = super(SavedSearchList, self).get_queryset()
+        return qs.filter(owner=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super(SavedSearchList, self).get_context_data(**kwargs)
+        context['selected'] = 'searches'
         return context

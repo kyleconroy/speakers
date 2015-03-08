@@ -63,6 +63,10 @@ urlpatterns = [
         views.TrackedConferenceList.as_view(),
         name='tracked_list'),
     url(
+        r'^account/searches$',
+        views.SavedSearchList.as_view(),
+        name='search_list'),
+    url(
         r'^account/talks$',
         views.TalkList.as_view(),
         name='talk_list'),
