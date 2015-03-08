@@ -143,9 +143,12 @@ class CallCreate(CreateView):
         year = self.kwargs['year']
         conf = get_object_or_404(Conference, start__year=year,
                                  slug=self.kwargs['slug'])
+
+        f = Form(name="{} {} CFP".format(conf.name, year))
+        f.save()
+
         form.instance.conference = conf
-        form.instance.form = Form(name="{} {} CFP".format(conf.name, year))
-        form.instance.form.save()
+        form.instance.form = f
 
         if form.instance.notify is None:
             form.instance.notify = form.instance.end + timedelta(days=7)

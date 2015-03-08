@@ -55,6 +55,7 @@ clone.short_description = "Clone form"
 class FormAdmin(admin.ModelAdmin):
     inlines = [FieldInline]
     actions = [clone]
+    search_fields = ['name']
     list_display = ('name', 'created',)
 
 
