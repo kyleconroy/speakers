@@ -47,7 +47,6 @@ CALL_FIELDS = (
     'description',
     'start',
     'end',
-    'notify',
     'application_url',
 )
 
@@ -186,8 +185,7 @@ class CallEdit(StaffRequiredMixin, UpdateView):
 
 def call_detail_and_form(request, slug, year):
     call = get_object_or_404(Call, conference__start__year=year,
-                             conference__slug=slug,
-                             state='approved')
+                             conference__slug=slug)
     context = {'call': call}
 
     if request.user.is_authenticated():

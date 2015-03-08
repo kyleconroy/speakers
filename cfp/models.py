@@ -23,6 +23,8 @@ class Topic(models.Model):
     def __str__(self):
         return self.name
 
+DATE_HELP = 'Dates are formated using MM/DD/YYYY'
+
 
 class Conference(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -46,8 +48,8 @@ class Conference(models.Model):
 
     watchers = models.ManyToManyField(User, blank=True)
 
-    start = models.DateField(db_index=True)
-    end = models.DateField(db_index=True)
+    start = models.DateField(db_index=True, help_text=DATE_HELP)
+    end = models.DateField(db_index=True, help_text=DATE_HELP)
 
     maps_url = models.URLField(max_length=1000, blank=True)
     website_url = models.URLField(max_length=500)
@@ -81,8 +83,8 @@ class Call(models.Model):
     conference = models.ForeignKey('Conference')
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     description = models.TextField(blank=True)
-    start = models.DateField(db_index=True)
-    end = models.DateField(db_index=True)
+    start = models.DateField(db_index=True, help_text=DATE_HELP)
+    end = models.DateField(db_index=True, help_text=DATE_HELP)
     notify = models.DateField(blank=True)
     lanyrd_url = models.URLField(max_length=500, blank=True)
     application_url = models.URLField(max_length=1000, blank=True)
