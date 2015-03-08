@@ -96,4 +96,4 @@ class TopicAdmin(admin.ModelAdmin):
 
 @admin.register(SavedSearch)
 class SavedSearchAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('__str__', 'owner')

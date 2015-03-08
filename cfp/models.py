@@ -6,6 +6,7 @@ import urllib.parse
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 from django_countries.fields import CountryField
 from django_fsm import FSMField, transition
@@ -27,7 +28,7 @@ DATE_HELP = 'Dates are formated using MM/DD/YYYY'
 
 
 class Conference(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(default=timezone.now)
 
     slug = models.CharField(max_length=100, db_index=True)
     legacy_slug = models.CharField(max_length=100, db_index=True, blank=True)
@@ -81,7 +82,7 @@ class Conference(models.Model):
 
 class Call(models.Model):
     conference = models.ForeignKey('Conference')
-    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    created = models.DateTimeField(default=timezone.now, db_index=True)
     description = models.TextField(blank=True)
     start = models.DateField(db_index=True, help_text=DATE_HELP)
     end = models.DateField(db_index=True, help_text=DATE_HELP)
@@ -138,7 +139,7 @@ class Call(models.Model):
 
 
 class Talk(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(default=timezone.now)
     submission = models.ForeignKey('formbuilder.Submission', null=True)
     token = models.CharField(max_length=15, unique=True)
     title = models.CharField(max_length=300)
@@ -161,7 +162,7 @@ class Talk(models.Model):
 
 
 class Profile(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(default=timezone.now)
     owner = models.ForeignKey(User, null=True, blank=True)
     name = models.CharField(max_length=300)
     email_address = models.EmailField(max_length=254)
@@ -203,7 +204,7 @@ class Profile(models.Model):
 
 
 class SavedSearch(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(default=timezone.now)
     owner = models.ForeignKey(User)
     q = models.CharField(max_length=254, default='', blank=True)
     country = CountryField(default='', blank=True)
@@ -225,3 +226,16 @@ class SavedSearch(models.Model):
         if self.q:
             info += " matching \"{}\"".format(self.q)
         return info
+
+
+class UserMailing(models.Model):
+    created = models.DateTimeField(default=timezone.now)
+    owner = models.ForeignKey(User)
+    call = models.ForeignKey(Call)
+    email = models.EmailField()
+    subject = models.CharField(max_length=500)
+    text = models.TextField()
+    html = models.TextField()
+
+    class Meta:
+        unique_together = ('owner', 'call')

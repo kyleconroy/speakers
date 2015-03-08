@@ -1,0 +1,27 @@
+{{ conf.name }}
+{{ conf.tagline }}
+
+{% if conf.website_url %}Website: {{ conf.website_url }}{% endif %}
+{% if conf.twitter_handle %}Twitter: https://twitter.com/{{ conf.twitter_handle }}{% endif %}
+
+{% if call.days_left == 0 %}Hurry! Applications are due by the end of the day{% else %}Applications due by {{ call.end|date:"M j, Y" }}{% endif %} 
+
+Apply today on Call to Speakers:
+http://calltospeakers.com{{ call.get_absolute_url }}
+
+**When and where is this conf?**
+
+{{ conf.date_range }}
+{{conf.city}}, {{ conf.country.name }}
+
+**Can you tell me more?**
+
+{{ conf.description|wordwrap:80 }}
+
+{{ call.description|wordwrap:80 }}
+
+You recieved this email because you have a saved search 
+for {{ saved_search }} on Call to Speakers.
+
+If you wish to no longer recieve these emails, you can unsubscribe here:
+https://calltospeakers/unsubscribe

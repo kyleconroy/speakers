@@ -123,6 +123,9 @@ class Development(Common):
         'debug_toolbar',
     )
 
+
+class Testing(Common):
+    DATABASES = values.DatabaseURLValue(environ_name='TEST_DATABASE_URL')
     TEST_RUNNER = 'calltospeakers.tests.RoadRunner'
 
 

@@ -3,8 +3,6 @@ import os
 import sys
 
 import dotenv
-
-
 dotenv.read_dotenv()
 
 
@@ -15,6 +13,8 @@ if __name__ == "__main__":
         settings = 'staging'
     elif ENVIRONMENT == 'PRODUCTION':
         settings = 'production'
+    elif ENVIRONMENT == 'TESTING':
+        settings = 'testing'
     else:
         settings = 'development'
 

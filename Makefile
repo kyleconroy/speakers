@@ -1,7 +1,7 @@
 .PHONY: deploy test
 
 test:
-	python manage.py test
+	@ENVIRONMENT='TESTING' python manage.py test
 
 deploy: test
 	git push origin master
