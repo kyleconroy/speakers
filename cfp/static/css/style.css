@@ -615,9 +615,19 @@ body {
   margin: 10px 0;
   display: flex;
   align-items: center;
-  justify-content: space-around;
   border-radius: 3px;
 }
+
+.callout span {
+  flex: 3;
+  padding-right: 10px;
+}
+
+.callout .btn {
+  flex: 1;
+  min-width: 150px;
+}
+
 
 .table-list {
   margin: 0;
@@ -672,7 +682,12 @@ body {
   display: flex;
   flex: 2 1 400px;
 }
-   
+
+#noresults p {
+  font-size: 24px;
+  text-align: center;
+}
+ 
 @media screen and (min-width: 568px) {
   .table-list-header {
     display: table-row;

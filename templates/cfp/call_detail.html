@@ -76,24 +76,6 @@
       {% endif %}
       </div>
 
-      {% if call.is_open %}
-        {% if tracking %}
-        <div>
-          <div class="tracked">Tracking</div>
-          <small>You'll receive email reminders when this call is about to close.</small>
-        </div>
-        {% elif user.is_authenticated %}
-        <form action="{{ call.conference.get_track_url }}" method="POST">
-          {% csrf_token %}
-          <input class="btn" type="submit" value="Remind me">
-          <small>Receive email reminders when this call is about to close.</small>
-        </form>
-        {% else %}
-        <a href="{% url 'signup' %}" class="btn">Sign up</a>
-        <small>To receive email reminders when this call is about to close.</small>
-        {% endif %}
-      {% endif %}
-
       {% if talks %}
       <h3>Previously submitted talks for this conference</h3>
       <ul>

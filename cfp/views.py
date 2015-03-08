@@ -1,5 +1,3 @@
-import itertools
-import re
 from datetime import datetime, timedelta
 
 from django.db import transaction
@@ -21,11 +19,13 @@ from django.http import HttpResponseRedirect
 
 from django_countries import countries
 
-from cfp.models import Call, Conference, Talk, Profile, token
+from cfp.models import Call, Conference, Talk, Profile, token, SavedSearch
+from cfp.models import Topic
 from formbuilder.models import Form
 from cfp.forms import UserCreationForm, AuthenticationForm, parse_handle
 from cfp.forms import ProfileForm, ReadOnlyForm, EmailSubmissionForm
-from cfp.forms import SearchForm
+from cfp.forms import SearchForm, SavedSearchForm
+from cfp import search
 
 CONFERENCE_FIELDS = (
     'name',
@@ -265,23 +265,22 @@ def track_conference(request, slug, year):
     return HttpResponseRedirect(conf.get_absolute_url())
 
 
-def tokenize_query(search):
-    groups = re.findall('([\'"].*?[\'"])|([\w:]+)', search)
-    return [x.replace("'", "").replace('"', "").strip() for x
-            in list(itertools.chain(*groups)) if x]
+@login_required
+def save_search(request):
+    if not request.method == 'POST':
+        return HttpResponseRedirect('/')
 
-
-def sanitize_query(search):
-    search = search.strip()
-    search = re.sub('[\?\|!\*]', '', search)
-    tokens = tokenize_query(search)
-    return '&'.join(["'{}'".format(x) for x in tokens if ':' not in x])
-
-
-def filters(search):
-    search = search.strip()
-    search = re.sub('[\?\|!\*]', '', search)
-    return [t.split(':') for t in tokenize_query(search) if ':' in t]
+    form = SavedSearchForm(request.POST)
+    if form.is_valid():
+        topic = Topic.objects.filter(value=form.cleaned_data['topic']).first()
+        ss, created = SavedSearch.objects.get_or_create(
+            owner=request.user,
+            q=form.cleaned_data['q'],
+            country=form.cleaned_data['location'].upper(),
+            topic=topic,
+        )
+        return HttpResponseRedirect(ss.get_absolute_url())
+    return HttpResponseRedirect('/')
 
 
 class CallList(ListView):
@@ -290,9 +289,7 @@ class CallList(ListView):
 
     def get_queryset(self):
         qs = super(CallList, self).get_queryset()
-        qs = qs.filter(state='approved',
-                       start__lte=datetime.utcnow(),
-                       end__gte=datetime.utcnow())
+        qs = Call.open_and_approved(queryset=qs)
 
         # TODO: Cache these values
         locations = [('', 'Any country')]
@@ -314,20 +311,24 @@ class CallList(ListView):
         location = self.search.cleaned_data['location']
         sort = self.search.cleaned_data['sort']
         topic = self.search.cleaned_data['topic']
-        q = sanitize_query(self.search.cleaned_data['q'])
+        q = self.search.cleaned_data['q']
 
-        if q:
-            sql = "cfp_conference.fts_document @@ to_tsquery('simple', %s)"
-            ids = Conference.objects.values_list('id', flat=True).extra(
-                where=[sql], params=[q],
+        qs = search.results(queryset=qs, q=q, location=location, topic=topic)
+
+        self.saved_search = SavedSearch.objects.filter(
+            owner=self.request.user,
+            q=q,
+            country=location.upper(),
+            topic__value=topic,
+        ).first()
+
+        if self.saved_search is None:
+            topic = Topic.objects.filter(value=topic).first()
+            self.saved_search = SavedSearch(
+                q=q,
+                country=location.upper(),
+                topic=topic,
             )
-            qs = qs.filter(conference__in=set(ids))
-
-        if location:
-            qs = qs.filter(conference__country=location.upper())
-
-        if topic:
-            qs = qs.filter(conference__topics__value=topic.lower())
 
         if sort == 'newest':
             return qs.order_by('-created')
@@ -338,6 +339,7 @@ class CallList(ListView):
         context = super(CallList, self).get_context_data(**kwargs)
         context['query'] = self.request.GET.get('q') or ""
         context['search'] = self.search
+        context['saved_search'] = self.saved_search
         return context
 
 

@@ -67,6 +67,10 @@ urlpatterns = [
         views.TalkList.as_view(),
         name='talk_list'),
     url(
+        r'^account/searches/create$',
+        views.save_search,
+        name='save_search'),
+    url(
         r'^account/talks/(?P<pk>\d+)$',
         views.TalkDetail.as_view(),
         name='talk_read'),

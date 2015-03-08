@@ -119,3 +119,15 @@ class SearchForm(forms.Form):
         ('closing', 'By closing'),
         ('newest', 'By newest'),
     ), required=False, label='')
+
+
+class SavedSearchForm(forms.Form):
+    q = forms.CharField(max_length=254, required=False)
+    location = forms.CharField(max_length=100, required=False)
+    topic = forms.CharField(max_length=100, required=False)
+
+    def clean(self):
+        cd = super(SavedSearchForm, self).clean()
+        if not any([cd.get("q"), cd.get("location"), cd.get("topic")]):
+            raise forms.ValidationError("Query, location, or topic required")
+        return cd

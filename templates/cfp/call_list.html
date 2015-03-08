@@ -1,12 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% if not empty_profile %}
-<div class="callout">
-  <span>Are we missing your favorite conference? Help us out and add it to our list!</span>
-  <a class="btn" href="{% url "conference_create" %}">Submit a call for speakers</a>
-</div>
-{% endif %}
 <form id="search" action="" method="get">
   <div id="search-bar">
     {{ search.q }}
@@ -18,6 +12,29 @@
     {{ search.sort }}
   </div>
 </form>
+
+{% if not saved_search.pk %}
+{% if search.q.value or search.location.value or search.topic.value %}
+{% if user.is_authenticated %}
+<form id="savesearch" class="callout" action="{% url 'save_search' %}" method="post">
+    {% csrf_token %}
+    {{ search.q.as_hidden }}
+    {{ search.location.as_hidden }}
+    {{ search.topic.as_hidden }}
+    <span>Save this search and get notified when future {{ saved_search }} open.</span>
+  <input class="btn" type="submit" value="Save this search">
+</form>
+{% else %}
+<div id="savesearch" class="callout">
+  <span>Sign up to get notified when future {{ saved_search }} open.</span>
+  <a href="{% url 'signup' %}" class="btn">Sign up</a>
+</div>
+{% endif %}
+{% endif %}
+{% endif %}
+
+
+{% if calls %}
 <ul id="conferences" class="table-list">
   <li class="table-list-header">
     <div class="table-list-cell call-days">Closes</div>
@@ -49,4 +66,10 @@
   {% endwith %}
   {% endfor %}
 </ul>
+{% else %}
+<div id="noresults">
+  <p>Shucks, it looks like there aren't any calls that match your search.</p>
+  <p>Help us out a <a href="{% url 'conference_create' %}">submit a call for speakers</a> today!</p>
+</div>
+{% endif %}
 {% endblock %}

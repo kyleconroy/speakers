@@ -96,6 +96,14 @@ class Call(models.Model):
     # just post a link to the talk
     hosted = models.BooleanField(default=False)
 
+    @classmethod
+    def open_and_approved(cls, queryset=None):
+        if queryset is None:
+            queryset = cls.objects
+        return queryset.filter(state='approved',
+                               start__lte=datetime.utcnow(),
+                               end__gte=datetime.utcnow())
+
     def __str__(self):
         return "{} CFP".format(self.conference)
 
@@ -192,3 +200,28 @@ class Profile(models.Model):
             len(self.organization) == 0,
             len(self.job_title) == 0,
             len(self.name) == 0))
+
+
+class SavedSearch(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    owner = models.ForeignKey(User)
+    q = models.CharField(max_length=254, default='', blank=True)
+    country = CountryField(default='', blank=True)
+    topic = models.ForeignKey(Topic, null=True, blank=True)
+
+    def get_absolute_url(self):
+        return "/?" + urllib.parse.urlencode({
+            'q': self.q,
+            'location': self.country.code.lower(),
+            'topic': self.topic.value if self.topic else '',
+        })
+
+    def __str__(self):
+        info = "calls"
+        if self.country:
+            info += " in the {}".format(self.country.name)
+        if self.topic:
+            info += " about {}".format(self.topic.name)
+        if self.q:
+            info += " matching \"{}\"".format(self.q)
+        return info

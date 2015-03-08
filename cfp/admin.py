@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from cfp.models import Call, Conference, Profile, Talk, Topic
+from cfp.models import Call, Conference, Profile, Talk, Topic, SavedSearch
 
 
 class CallInline(admin.StackedInline):
@@ -90,5 +90,10 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 @admin.register(Topic)
-class Topic(admin.ModelAdmin):
+class TopicAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(SavedSearch)
+class SavedSearchAdmin(admin.ModelAdmin):
     pass
