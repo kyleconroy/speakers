@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from cfp import models, views
+from cfp import models, search
 
 
 class CFPTest(TestCase):
@@ -28,19 +28,19 @@ class CFPTest(TestCase):
 class SearchTest(TestCase):
     def test_single_quotes(self):
         self.assertEquals(['foo', 'foo bar', 'baz'],
-                          views.tokenize_query("'foo' 'foo bar' baz"))
+                          search.tokenize_query("'foo' 'foo bar' baz"))
 
     def test_double_quotes(self):
         self.assertEquals(['foo bar', 'baz'],
-                          views.tokenize_query('"foo bar" baz'))
+                          search.tokenize_query('"foo bar" baz'))
 
     def test_whitespace(self):
-        self.assertEquals(['hello'], views.tokenize_query("    hello "))
+        self.assertEquals(['hello'], search.tokenize_query("    hello "))
 
     def test_colons(self):
         self.assertEquals(['foo', 'location:us', 'topic:python'],
-                          views.tokenize_query("foo location:us topic:python"))
+                          search.tokenize_query("foo location:us topic:python"))
 
     def test_filters(self):
         self.assertEquals([['location', 'us'], ['topic', 'python']],
-                          views.filters("foo location:us topic:python"))
+                          search.filters("foo location:us topic:python"))
