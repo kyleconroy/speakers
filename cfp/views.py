@@ -320,13 +320,15 @@ class CallList(ListView):
         found_topic = Topic.objects.filter(value=topic).first()
 
         qs = search.results(queryset=qs, q=q, location=location, topic=topic)
+        self.saved_search = None
 
-        self.saved_search = SavedSearch.objects.filter(
-            owner=self.request.user,
-            q=q,
-            country=location.upper(),
-            topic=found_topic,
-        ).first()
+        if self.request.user.is_authenticated():
+            self.saved_search = SavedSearch.objects.filter(
+                owner=self.request.user,
+                q=q,
+                country=location.upper(),
+                topic=found_topic,
+            ).first()
 
         if self.saved_search is None:
             self.saved_search = SavedSearch(
