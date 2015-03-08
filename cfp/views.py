@@ -22,6 +22,7 @@ from django.http import HttpResponseRedirect
 from django_countries import countries
 
 from cfp.models import Call, Conference, Talk, Profile, token
+from formbuilder.models import Form
 from cfp.forms import UserCreationForm, AuthenticationForm, parse_handle
 from cfp.forms import ProfileForm, ReadOnlyForm, EmailSubmissionForm
 from cfp.forms import SearchForm
@@ -139,9 +140,12 @@ class CallCreate(CreateView):
     fields = CALL_FIELDS
 
     def form_valid(self, form):
-        conf = get_object_or_404(Conference, start__year=self.kwargs['year'],
+        year = self.kwargs['year']
+        conf = get_object_or_404(Conference, start__year=year,
                                  slug=self.kwargs['slug'])
         form.instance.conference = conf
+        form.instance.form = Form(name="{} {} CFP".format(conf.name, year))
+        form.instance.form.save()
 
         if form.instance.notify is None:
             form.instance.notify = form.instance.end + timedelta(days=7)
