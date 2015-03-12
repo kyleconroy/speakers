@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="slim">
+<h2>Host your call for speakers with us</h2>
+<p>
+  Call to Speakers is the best place to find opportunities to speak at tech conferences.
+  With saved profiles, email notifications and submission forms all in one place, 
+  we make it easy for anyone to submit a talk to a conference.
+</p>
+
+<p>
+</p>
+
+<div class="actionpanel">
+  <h3>Selection process transparency</h3>
+  <p>
+    Gone are the days where applicants fire off their submission and hope to response.
+    Applicants can track there submission in real time, and will always be notified about
+    the outcome of their submission. No more waiting for an email that never comes.
+  </p>
+</div>
+
+<div class="actionpanel">
+  <h3>Reduce hidden biases</h3>
+  <p>
+    Today, your selection committee is prone to subtle and hidden biases. For examples, studies have shown that something as simple as <strong>the name of the applicant</strong> has strong predictors on the success of that application. A <a href="http://advance.cornell.edu/documents/ImpactofGender.pdf">Cornell study</a> found that:
+    <blockquote>[b]oth men and women were more likely to vote to hire a male job applicant
+than a female job applicant with an identical record.</blockquote>
+
+  A blind application process prevents this bias and helps you make more balanced selections.
+  </p>
+</div>
+
+<form action="" method="post" class="form">
+    {% csrf_token %}
+    <p>
+      <label for="id_cfp_url"><h3>Interested? Enter your email below and we'll be in touch</h3></label>
+      <input id="id_cfp_url" placeholder="email@example.com" maxlength="255" name="cfp_url" type="email">
+    </p>
+    <button type="submit" class="btn btn-primary">
+      Sign up for the waiting list
+    </button>
+</form>
+</div>
+{% endblock %}

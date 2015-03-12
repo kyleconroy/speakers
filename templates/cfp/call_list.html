@@ -1,6 +1,14 @@
 {% extends "base.html" %}
-
 {% block content %}
+{% if not empty_profile %}
+<div class="callout action">
+  <span>
+    Running a call for speakers? Your conference needs more than a Google form. Let us show you how.
+  </span>
+  <a class="btn" href="{% url 'hosted' %}">Learn more</a>
+</div>
+{% endif %}
+
 <form id="search" action="" method="get">
   <div id="search-bar">
     {{ search.q }}

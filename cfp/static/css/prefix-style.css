@@ -777,6 +777,11 @@ body {
   text-align: center;
 }
 
+.action {
+  background: #FFF0DF;
+  border: 1px solid #EF8126;
+}
+
 #suggestion input {
   display: inline-block;
   width: 95%;

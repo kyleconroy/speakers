@@ -47,6 +47,10 @@ urlpatterns = [
         r'^admin/',
         include(admin.site.urls)),
     url(
+        r'^hosted$',
+        views.BetaSignup.as_view(),
+        name='hosted'),
+    url(
         r'^conferences/new$',
         views.ConferenceCreate.as_view(),
         name='conference_create'),

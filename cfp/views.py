@@ -20,7 +20,7 @@ from django.http import HttpResponseRedirect
 from django_countries import countries
 
 from cfp.models import Call, Conference, Talk, Profile, token, SavedSearch
-from cfp.models import Topic
+from cfp.models import Topic, Suggestion
 from formbuilder.models import Form
 from cfp.forms import UserCreationForm, AuthenticationForm, parse_handle
 from cfp.forms import ProfileForm, ReadOnlyForm, EmailSubmissionForm
@@ -135,7 +135,7 @@ class SubmissionEmail(StaffRequiredMixin, FormView):
         return super(SubmissionEmail, self).form_valid(form)
 
 
-class SuggestionCreate(StaffRequiredMixin, FormView):
+class SuggestionCreate(FormView):
     form_class = SuggestionForm
     success_url = '/'
 
@@ -145,6 +145,18 @@ class SuggestionCreate(StaffRequiredMixin, FormView):
                          ('Thanks for the suggestion, it should appear '
                           'on the site in a day or two'))
         return super(SuggestionCreate, self).form_valid(form)
+
+
+class BetaSignup(CreateView):
+    model = Suggestion
+    success_url = '/hosted'
+    fields = ('cfp_url',)
+
+    def form_valid(self, form):
+        messages.success(self.request,
+                         ('Thanks for your interest! Expect an email '
+                          'from us very soon!'))
+        return super(BetaSignup, self).form_valid(form)
 
 
 class CallCreate(CreateView):
