@@ -326,9 +326,9 @@ class CallList(ListView):
         for c in sorted(set(qs.values_list('conference__country', flat=True))):
             locations.append((c.lower(), dict(countries)[c]))
 
-        topics = list(set(qs.values_list('conference__topics__value',
-                                         'conference__topics__name')))
-        topics = sorted((k, v) for k, v in topics if k is not None)
+        topics = Topic.objects.values_list('value', 'name')
+        topics = sorted(((k, v) for k, v in topics if k is not None),
+                        key=lambda x: x[1].lower())
         topics.insert(0, ('', 'Any topic'))
 
         self.search = SearchForm(self.request.GET)
