@@ -20,7 +20,7 @@ from django.http import HttpResponseRedirect
 from django_countries import countries
 
 from cfp.models import Call, Conference, Talk, Profile, token, SavedSearch
-from cfp.models import Topic, Suggestion
+from cfp.models import Topic, Interest
 from formbuilder.models import Form
 from cfp.forms import UserCreationForm, AuthenticationForm, parse_handle
 from cfp.forms import ProfileForm, ReadOnlyForm, EmailSubmissionForm
@@ -148,9 +148,9 @@ class SuggestionCreate(FormView):
 
 
 class BetaSignup(CreateView):
-    model = Suggestion
+    model = Interest
     success_url = '/hosted'
-    fields = ('cfp_url',)
+    fields = ('email',)
 
     def form_valid(self, form):
         messages.success(self.request,

@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.forms.widgets import Select
 
-from cfp.models import Profile, Suggestion
+from cfp.models import Profile, Suggestion, token
 
 
 def parse_handle(handle):
@@ -30,7 +30,7 @@ class UserCreationForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
-        user.username = user.email
+        user.username = token(25)
         user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()
@@ -52,7 +52,15 @@ class AuthenticationForm(forms.Form):
         password = self.cleaned_data.get('password')
 
         if email and password:
-            self.user_cache = authenticate(username=email, password=password)
+            user = User.objects.filter(email=email).first()
+            if user is None:
+                raise forms.ValidationError(
+                    self.error_messages['invalid_login'],
+                    code='invalid_login',
+                )
+
+            self.user_cache = authenticate(username=user.username,
+                                           password=password)
             if self.user_cache is None:
                 raise forms.ValidationError(
                     self.error_messages['invalid_login'],

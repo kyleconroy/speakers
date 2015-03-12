@@ -782,9 +782,10 @@ body {
   border: 1px solid #EF8126;
 }
 
-#suggestion input {
+#id_cfp_url {
   display: inline-block;
-  width: 95%;
+  margin-right: 10px;
+  width: 80%;
 }
  
 @media screen and (min-width: 568px) {

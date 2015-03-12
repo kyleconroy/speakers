@@ -239,9 +239,15 @@ class SavedSearch(models.Model):
 
 
 class Suggestion(models.Model):
-    """A suggestion is a signle URL that someone enters on the page"""
+    """A suggestion is a single URL that someone enters on the page"""
     created = models.DateTimeField(default=timezone.now)
     cfp_url = models.CharField(max_length=255)
+
+
+class Interest(models.Model):
+    """An email address if someone wants to create a call"""
+    created = models.DateTimeField(default=timezone.now)
+    email = models.EmailField()
 
 
 class UserMailing(models.Model):

@@ -42,7 +42,6 @@
 {% endif %}
 
 
-{% if calls %}
 <ul id="conferences" class="table-list">
   <li class="table-list-header">
     <div class="table-list-cell call-days">Closes</div>
@@ -73,14 +72,18 @@
   </li>
   {% endwith %}
   {% endfor %}
+  <li>
+    <div class="table-list-cell call-days">
+    </div>
+    <div class="table-list-cell">
+      <p>Are we missing an open CFP? Enter the URL for the conference or the call for speakers below and we'll add it.</p>
+      <form action="{% url 'suggestion_create' %}" method="post">
+        {% csrf_token %}
+        <input id="id_cfp_url" placeholder="https://conf.example.com/cfp" maxlength="255" name="cfp_url" type="text"><input type="submit" value="Add CFP">
+      </form>
+    </div>
+    <div class="table-list-cell call-form">
+    </div>
+  </li>
 </ul>
-{% else %}
-<div id="noresults">
-  <p>Hmm, no luck.Is there a conference we're missing?<br/>Just enter the URL for the conference of the call for speakers. We'll handle the rest</p>
-  <form id="suggestion" action="{% url 'suggestion_create' %}" method="post">
-    {% csrf_token %}
-    {{ suggestion_box.as_p }}
-  </form>
-</div>
-{% endif %}
 {% endblock %}
