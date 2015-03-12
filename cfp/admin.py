@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from cfp.models import Call, Conference, Profile, Talk, Topic, SavedSearch
+from cfp.models import Suggestion
 
 
 class CallInline(admin.StackedInline):
@@ -97,3 +98,8 @@ class TopicAdmin(admin.ModelAdmin):
 @admin.register(SavedSearch)
 class SavedSearchAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'owner')
+
+
+@admin.register(Suggestion)
+class SuggestionAdmin(admin.ModelAdmin):
+    list_display = ('cfp_url', 'created')

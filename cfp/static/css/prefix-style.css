@@ -776,6 +776,11 @@ body {
   font-size: 24px;
   text-align: center;
 }
+
+#suggestion input {
+  display: inline-block;
+  width: 95%;
+}
  
 @media screen and (min-width: 568px) {
   .table-list-header {

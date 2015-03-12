@@ -68,8 +68,11 @@
 </ul>
 {% else %}
 <div id="noresults">
-  <p>Shucks, it looks like there aren't any calls that match your search.</p>
-  <p>Help us out a <a href="{% url 'conference_create' %}">submit a call for speakers</a> today!</p>
+  <p>Hmm, no luck.Is there a conference we're missing?<br/>Just enter the URL for the conference of the call for speakers. We'll handle the rest</p>
+  <form id="suggestion" action="{% url 'suggestion_create' %}" method="post">
+    {% csrf_token %}
+    {{ suggestion_box.as_p }}
+  </form>
 </div>
 {% endif %}
 {% endblock %}

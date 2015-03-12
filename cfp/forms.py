@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.forms.widgets import Select
 
-from cfp.models import Profile
+from cfp.models import Profile, Suggestion
 
 
 def parse_handle(handle):
@@ -74,6 +74,15 @@ class ProfileForm(forms.ModelForm):
             'twitter_handle': 'Twitter',
             'github_handle': 'GitHub',
             'linkedin': 'LinkedIn',
+        }
+
+
+class SuggestionForm(forms.ModelForm):
+    class Meta:
+        model = Suggestion
+        exclude = ('created',)
+        labels = {
+            'cfp_url': '',
         }
 
 

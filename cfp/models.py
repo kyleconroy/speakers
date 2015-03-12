@@ -238,6 +238,12 @@ class SavedSearch(models.Model):
         return info
 
 
+class Suggestion(models.Model):
+    """A suggestion is a signle URL that someone enters on the page"""
+    created = models.DateTimeField(default=timezone.now)
+    cfp_url = models.CharField(max_length=255)
+
+
 class UserMailing(models.Model):
     created = models.DateTimeField(default=timezone.now)
     owner = models.ForeignKey(User)

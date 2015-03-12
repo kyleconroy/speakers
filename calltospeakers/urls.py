@@ -51,6 +51,10 @@ urlpatterns = [
         views.ConferenceCreate.as_view(),
         name='conference_create'),
     url(
+        r'^suggestions$',
+        views.SuggestionCreate.as_view(),
+        name='suggestion_create'),
+    url(
         r'^feed$',
         views.LatestCallsFeed(),
         name='call_feed'),

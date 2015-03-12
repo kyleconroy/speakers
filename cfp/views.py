@@ -24,7 +24,7 @@ from cfp.models import Topic
 from formbuilder.models import Form
 from cfp.forms import UserCreationForm, AuthenticationForm, parse_handle
 from cfp.forms import ProfileForm, ReadOnlyForm, EmailSubmissionForm
-from cfp.forms import SearchForm, SavedSearchForm
+from cfp.forms import SearchForm, SavedSearchForm, SuggestionForm
 from cfp import search
 
 CONFERENCE_FIELDS = (
@@ -133,6 +133,18 @@ class SubmissionEmail(StaffRequiredMixin, FormView):
     def form_valid(self, form):
         form.send_email()
         return super(SubmissionEmail, self).form_valid(form)
+
+
+class SuggestionCreate(StaffRequiredMixin, FormView):
+    form_class = SuggestionForm
+    success_url = '/'
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request,
+                         ('Thanks for the suggestion, it should appear '
+                          'on the site in a day or two'))
+        return super(SuggestionCreate, self).form_valid(form)
 
 
 class CallCreate(CreateView):
@@ -347,6 +359,7 @@ class CallList(ListView):
         context['query'] = self.request.GET.get('q') or ""
         context['search'] = self.search
         context['saved_search'] = self.saved_search
+        context['suggestion_box'] = SuggestionForm()
         return context
 
 
