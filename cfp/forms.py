@@ -70,6 +70,11 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         exclude = ('owner',)
+        labels = {
+            'twitter_handle': 'Twitter',
+            'github_handle': 'GitHub',
+            'linkedin': 'LinkedIn',
+        }
 
 
 class ReadOnlyForm(forms.ModelForm):

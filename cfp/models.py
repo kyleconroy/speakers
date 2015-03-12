@@ -168,11 +168,19 @@ class Profile(models.Model):
     email_address = models.EmailField(max_length=254)
 
     bio = models.TextField(blank=True)
+    speaking_experience = models.TextField(
+        blank=True, help_text='Please include links to videos of you speaking')
+
+    photo_url = models.URLField(
+        max_length=500, blank=True, help_text='Bigger than 500x500 preferred')
     personal_website = models.URLField(max_length=500, blank=True)
     twitter_handle = models.CharField(max_length=20, blank=True)
     github_handle = models.CharField(max_length=20, blank=True)
+    linkedin = models.CharField(max_length=100, blank=True)
+
     organization = models.CharField(max_length=100, blank=True)
     job_title = models.CharField(max_length=50, blank=True)
+
     phone_number = models.CharField(max_length=20, blank=True)
     city = models.CharField(max_length=60, blank=True)
     country = CountryField(default='US')
@@ -200,7 +208,9 @@ class Profile(models.Model):
             len(self.github_handle) == 0,
             len(self.organization) == 0,
             len(self.job_title) == 0,
-            len(self.name) == 0))
+            len(self.name) == 0,
+            len(self.photo_url) == 0,
+            len(self.speaking_experience) == 0))
 
 
 class SavedSearch(models.Model):
