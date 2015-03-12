@@ -293,6 +293,7 @@ class CallList(ListView):
     context_object_name = 'calls'
 
     def get_queryset(self):
+        self.saved_search = None
         qs = super(CallList, self).get_queryset()
         qs = Call.open_and_approved(queryset=qs)
 
@@ -320,7 +321,6 @@ class CallList(ListView):
         found_topic = Topic.objects.filter(value=topic).first()
 
         qs = search.results(queryset=qs, q=q, location=location, topic=topic)
-        self.saved_search = None
 
         if self.request.user.is_authenticated():
             self.saved_search = SavedSearch.objects.filter(
