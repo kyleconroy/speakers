@@ -6,7 +6,7 @@
 
 <h2>Talk</h2>
 <div class="form">
-  {% for entry in talk.submission.entry_set.all %}
+  {% for entry in entries %}
   <p>
     <label>{{ entry.field.pretty_name }}</label>
     <input type="text" value="{{ entry.value }}">
