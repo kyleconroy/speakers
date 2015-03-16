@@ -110,10 +110,11 @@ class SubmissionDetail(StaffRequiredMixin, DetailView):
         context = super(SubmissionDetail, self).get_context_data(**kwargs)
         prof = modelform_factory(Profile, form=ReadOnlyForm, exclude=('id',))
         call = modelform_factory(Call, form=ReadOnlyForm, exclude=('id',))
-        context['entries'] = self.object.submission.entry_set.order_by('field__order')
-        context['profile'] = self.object.profile
-        context['profform'] = prof(instance=self.object.profile)
-        context['callform'] = call(instance=self.object.call)
+        talk = self.object
+        context['entries'] = talk.submission.entry_set.order_by('field__order')
+        context['profile'] = talk.profile
+        context['profform'] = prof(instance=talk.profile)
+        context['callform'] = call(instance=talk.call)
         return context
 
 

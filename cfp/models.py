@@ -56,6 +56,7 @@ class Conference(models.Model):
     website_url = models.URLField(max_length=500)
     conduct_url = models.URLField(max_length=500, blank=True)
     lanyrd_url = models.URLField(max_length=500, blank=True)
+    organizer = models.EmailField(max_length=254, blank=True)
 
     def website_domain(self):
         return urllib.parse.urlparse(self.website_url).netloc
