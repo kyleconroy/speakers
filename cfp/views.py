@@ -110,7 +110,7 @@ class SubmissionDetail(StaffRequiredMixin, DetailView):
         context = super(SubmissionDetail, self).get_context_data(**kwargs)
         prof = modelform_factory(Profile, form=ReadOnlyForm, exclude=('id',))
         call = modelform_factory(Call, form=ReadOnlyForm, exclude=('id',))
-
+        context['profile'] = self.object.profile
         context['profform'] = prof(instance=self.object.profile)
         context['callform'] = call(instance=self.object.call)
         return context
