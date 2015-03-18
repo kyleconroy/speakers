@@ -1,7 +1,6 @@
 import datetime
 
 from django.db import transaction
-from django.core.management.base import BaseCommand
 
 from django_countries import countries
 from bs4 import BeautifulSoup
@@ -9,6 +8,7 @@ import html2text
 import requests
 
 from cfp.models import Call, Conference
+from cfp.management.base import SentryCommand
 from formbuilder.models import Form
 
 
@@ -22,7 +22,7 @@ def normalize_hashtag(hashtag):
     return hashtag.replace("#", "").strip()
 
 
-class Command(BaseCommand):
+class Command(SentryCommand):
     help = 'Import CFPs from Lanyrd'
 
     def lanyrd_calls(self):

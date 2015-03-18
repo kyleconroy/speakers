@@ -1,14 +1,14 @@
 from datetime import datetime, timedelta
 import os
 
-from django.core.management.base import BaseCommand
+from cfp.management.base import SentryCommand
 
 import tweepy
 
 from cfp.models import Call
 
 
-class Command(BaseCommand):
+class Command(SentryCommand):
     help = 'Tweet out CFPs'
 
     def messages(self, call):

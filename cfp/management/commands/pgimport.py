@@ -1,10 +1,10 @@
 import os
 import subprocess as sh
 
-from django.core.management.base import BaseCommand
+from cfp.management.base import SentryCommand
 
 
-class Command(BaseCommand):
+class Command(SentryCommand):
     help = 'Import the production database locally'
 
     def handle(self, *args, **options):
