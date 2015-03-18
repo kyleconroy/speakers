@@ -47,7 +47,11 @@ class Command(SentryCommand):
         call = Call.objects.filter(tweet_id=0, state='approved',
                                    start__lte=datetime.utcnow(),
                                    end__gte=datetime.utcnow()).\
-            order_by('-created')[0]
+            order_by('-created').first()
+
+        if call is None:
+            self.stdout.write("no calls to announce")
+            return
 
         for message in self.messages(call):
             try:
