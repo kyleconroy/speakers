@@ -51,8 +51,8 @@ def parse_google_form(html):
         field = form.field_set.create(
             order=i,
             required=required,
-            label=label,
-            name=name,
+            label=label[:255],
+            name=name[:255],
             help_text=help_text[:255],
             widget=widget,
             kind=kind,
