@@ -47,7 +47,7 @@ class Command(SentryCommand):
         soup = BeautifulSoup(resp.content)
         conf = Conference()
         conf.lanyrd_url = url
-        conf.slug = url.split("/")[-2]
+        conf.slug = url.split("/")[-2][:100]
 
         match = soup.select("div.primary h1.summary")
         if match:
@@ -75,7 +75,7 @@ class Command(SentryCommand):
 
         match = soup.select("a.sub-place")
         if match:
-            conf.city = match[0].text.strip()
+            conf.city = match[0].text.strip()[:100]
 
         match = soup.select("span.place-context a")
         if not match:
@@ -88,7 +88,7 @@ class Command(SentryCommand):
 
         match = soup.select("#venues h3")
         if match:
-            conf.venue_name = match[0].text.strip()
+            conf.venue_name = match[0].text.strip()[:100]
 
         match = soup.select("#venues a.map-icon")
         if match:
