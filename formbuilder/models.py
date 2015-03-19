@@ -138,8 +138,8 @@ class Field(models.Model):
 
     def choices(self):
         if self.kind in set([self.CHOICE, self.MULTIPLECHOICE]):
-            return [(str(i), v) for i, v in
-                    self.option_set.values_list('id', 'value')]
+            cs = self.option_set.values_list('id', 'value').order_by('id')
+            return [(str(i), v) for i, v in cs]
         else:
             return []
 
