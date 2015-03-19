@@ -175,8 +175,8 @@ class Profile(models.Model):
     photo_url = models.URLField(
         max_length=500, blank=True, help_text='Bigger than 500x500 preferred')
     personal_website = models.URLField(max_length=500, blank=True)
-    twitter_handle = models.CharField(max_length=20, blank=True)
-    github_handle = models.CharField(max_length=20, blank=True)
+    twitter_handle = models.CharField(max_length=45, blank=True)
+    github_handle = models.CharField(max_length=45, blank=True)
     linkedin = models.CharField(max_length=100, blank=True)
 
     organization = models.CharField(max_length=100, blank=True)
