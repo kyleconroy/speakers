@@ -111,6 +111,9 @@ class SubmissionDetail(StaffRequiredMixin, DetailView):
         prof = modelform_factory(Profile, form=ReadOnlyForm, exclude=('id',))
         call = modelform_factory(Call, form=ReadOnlyForm, exclude=('id',))
         talk = self.object
+        title = talk.submission.entry_set.filter(field__name='title').first()
+        if title:
+            context['title'] = title.value
         context['entries'] = talk.submission.entry_set.order_by('field__order')
         context['profile'] = talk.profile
         context['profform'] = prof(instance=talk.profile)
