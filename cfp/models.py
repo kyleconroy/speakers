@@ -90,6 +90,7 @@ class Call(models.Model):
     notify = models.DateField(blank=True)
     lanyrd_url = models.URLField(max_length=500, blank=True)
     application_url = models.URLField(max_length=1000, blank=True)
+    application_email = models.EmailField(blank=True)
     tweet_id = models.BigIntegerField(db_index=True, default=0)
     state = FSMField(default='new', protected=True, db_index=True)
     form = models.ForeignKey('formbuilder.Form', null=True)

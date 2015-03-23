@@ -87,7 +87,7 @@ urlpatterns = [
         views.TalkDetail.as_view(),
         name='talk_read'),
     url(
-        r'^submissions/email$',
+        r'^submissions/(?P<pk>\d+)/email$',
         views.SubmissionEmail.as_view(),
         name='submission_email'),
     url(

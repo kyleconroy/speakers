@@ -1,0 +1,21 @@
+# {{ title }}
+
+* Name: {{ profile.name }}
+* Location: {{ profile.city }}, {{ profile.country.name }}
+* Email: {{ profile.email_address }}
+* Twitter: [@{{ profile.twitter_handle }}](https://twitter.com/{{ profile.twitter_handle}})
+* GitHub: [{{ profile.github_handle }}](https://github.com/{{ profile.github_handle }})
+* Url(s): [{{ profile.personal_website}}]({{ profile.personal_website }})
+
+## The story you'd like to tell
+{% for entry in entries %}{% if entry.field.name != 'title' %}
+{{ entry.field.pretty_name }}: {{ entry.value }}
+{% endif %}{% endfor %}
+## Speaker Bio
+
+![photo]({{ profile.photo_url }})
+
+{{ profile.bio }}
+
+{{ profile.speaking_experience }}
+

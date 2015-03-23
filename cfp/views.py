@@ -14,6 +14,8 @@ from django.views.generic import ListView
 from django.views.generic.edit import CreateView, FormView, UpdateView
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect, render
+from django.template import Context
+from django.template.loader import get_template
 from django.utils.text import slugify
 from django.http import HttpResponseRedirect
 
@@ -138,6 +140,28 @@ class SubmissionEmail(StaffRequiredMixin, FormView):
     def form_valid(self, form):
         form.send_email()
         return super(SubmissionEmail, self).form_valid(form)
+
+    def get_form(self, form_class):
+        talk = get_object_or_404(Talk, pk=self.kwargs['pk'])
+        form = super(SubmissionEmail, self).get_form(form_class)
+        form.fields['conference_email'].initial = talk.call.application_email
+        form.fields['presenter_email'].initial = talk.profile.email_address
+        form.fields['presenter_name'].initial = talk.profile.name
+
+        title = talk.submission.entry_set.filter(field__name='title').first()
+        if title:
+            form.fields['subject'].initial = "[talk] {}".format(title.value)
+
+        text = get_template('cfp/email/talk_submission.txt').render(
+            Context({
+                'profile': talk.profile,
+                'title': title.value if title else None,
+                'entries': talk.submission.entry_set.order_by('field__order'),
+            })
+        )
+
+        form.fields['body'].initial = text
+        return form
 
 
 class SuggestionCreate(FormView):
