@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-{% if not empty_profile %}
+{% if false %}
 <div class="callout action">
   <span>
     Running a call for speakers? Your conference needs more than a Google form. Let us show you how.
@@ -52,7 +52,7 @@
   </li>
   {% for c in calls %}
     {% with conf=c.conference %}
-  <li>
+  <li class="table-list-row">
     <div class="table-list-cell call-days">
       {% with total=business.employees.count %}
         {% if c.days_left == 0 %}

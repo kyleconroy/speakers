@@ -1,3 +1,4 @@
+{% load gravatar %}
 {% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
@@ -33,20 +34,23 @@
     <div id="wrapper">
         <header id="nav">
           <a class="site-title" href="/">
-            <img src="/static/img/logo-md.png"><span>Call to Speakers<span>
+            <span>call</span><span class="to"> to </span><span>speakers</span>
           </a>
           <ul>
           {% if user.is_authenticated %}
-          <li>{{ user.email }}</li>
-          <li><a class="btn" href="{% url 'profile' %}">
-              Profile
-          </a></li>
-          <li><a class="btn" href="{% url 'logout' %}">
-              Log out
-          </a></li>
+          <li>
+            <a id="profile-link" href="{% url 'profile' %}" class="profile">
+              <img class="gravatar" src="{{ user.email|gravatarize }}">
+              <span>{{ user.email }}</span>
+            </a>
+            <ul id="profile-menu">
+              <li><a href="{% url 'profile' %}">Profile</a></li>
+              <li><a href="{% url 'logout' %}">Log out</a></li>
+            </ul>
+          </li>
           {% else %}
-          <li><a class="btn" href="{% url 'login' %}">Log in</a></li>
-          <li><a class="btn btn-primary" href="{% url 'signup' %}">Sign up</a></li>
+          <li><a class="but" href="{% url 'login' %}">LOG IN</a></li>
+          <li><a class="but but-primary" href="{% url 'signup' %}">SIGN UP</a></li>
           {% endif %}
           </ul>
         </header>
@@ -74,5 +78,18 @@
     </div>
     <script src="https://www.google-analytics.com/analytics.js" async></script>
     <script src="/static/js/ga.js"></script>
+    <script src="/static/js/jquery-2.1.3.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $("#profile-link").click(function(e) {
+          $("#profile-menu").addClass('visible');
+          e.preventDefault();
+          e.stopPropagation();
+        });
+        $(document).click(function(e) {
+          $("#profile-menu").removeClass('visible');
+        });
+      })
+    </script>
   </body>
 </html>
