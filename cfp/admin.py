@@ -109,6 +109,7 @@ archive.short_description = "Archive selected suggestions"
 
 @admin.register(Suggestion)
 class SuggestionAdmin(admin.ModelAdmin):
+    readonly_fields = ('state',)
     list_display = ('cfp_url', 'created', 'state')
     list_filter = ('state',)
     actions = [archive]
