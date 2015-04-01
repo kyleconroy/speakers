@@ -100,9 +100,18 @@ class SavedSearchAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'owner')
 
 
+def archive(modeladmin, request, queryset):
+    for suggestion in queryset.all():
+        suggestion.archive()
+        suggestion.save()
+archive.short_description = "Archive selected suggestions"
+
+
 @admin.register(Suggestion)
 class SuggestionAdmin(admin.ModelAdmin):
-    list_display = ('cfp_url', 'created')
+    list_display = ('cfp_url', 'created', 'state')
+    list_filter = ('state',)
+    actions = [archive]
 
 
 @admin.register(Interest)

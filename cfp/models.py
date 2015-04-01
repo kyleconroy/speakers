@@ -243,7 +243,12 @@ class SavedSearch(models.Model):
 class Suggestion(models.Model):
     """A suggestion is a single URL that someone enters on the page"""
     created = models.DateTimeField(default=timezone.now)
-    cfp_url = models.CharField(max_length=255)
+    cfp_url = models.URLField(max_length=1000)
+    state = FSMField(default='inbox', protected=True, db_index=True)
+
+    @transition(field=state, source='inbox', target='archived')
+    def archive(self):
+        pass
 
 
 class Interest(models.Model):
