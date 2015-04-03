@@ -88,7 +88,7 @@ class ProfileForm(forms.ModelForm):
 class SuggestionForm(forms.ModelForm):
     class Meta:
         model = Suggestion
-        exclude = ('created',)
+        exclude = ('created', 'state',)
         labels = {
             'cfp_url': '',
         }
