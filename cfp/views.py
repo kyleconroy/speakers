@@ -422,7 +422,7 @@ class TalkDetail(LoginRequiredMixin, DetailView):
         return context
 
 
-class TalkList(ListView):
+class TalkList(LoginRequiredMixin, ListView):
     model = Talk
     context_object_name = 'talks'
 
