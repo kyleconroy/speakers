@@ -377,7 +377,12 @@ class CallList(ListView):
         if found_topic:
             tags = [found_topic.value]
 
-        qs = search.results(queryset=qs, q=q, location=location, topic=topic)
+        topics = []
+        if topic:
+            topics.append(topic)
+
+        qs = search.results(queryset=qs, q=q, location=location,
+                            topics=topics)
 
         if self.request.user.is_authenticated():
             self.saved_search = SavedSearch.objects.filter(

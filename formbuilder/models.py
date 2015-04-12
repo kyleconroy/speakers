@@ -25,19 +25,21 @@ class Form(models.Model):
         sub = Submission(form=self)
         entries = []
 
-        for k, v in form.cleaned_data.items():
-            field = form.fields[k].field
-            choices = dict(field.choices())
-
-            entries.append(Entry(
-                submission=sub,
-                field=form.fields[k].field,
-                value=str(choices.get(v, v)),
-            ))
-
         with transaction.atomic():
             sub.save()
+
+            for k, v in form.cleaned_data.items():
+                field = form.fields[k].field
+                choices = dict(field.choices())
+
+                entries.append(Entry(
+                    submission=sub,
+                    field=form.fields[k].field,
+                    value=str(choices.get(v, v)),
+                ))
+
             sub.entry_set = entries
+            sub.save()
 
         return sub
 
