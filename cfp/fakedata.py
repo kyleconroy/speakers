@@ -32,7 +32,7 @@ def get_name():
 
 def make_user(username=None):
     username = username or random_string(25)
-    return User.objects.create(username=username)
+    return User.objects.create(username=username, last_login=timezone.now())
 
 
 def make_call(conference=None, created=None, country='US',
