@@ -46,7 +46,6 @@ class Conference(models.Model):
 
     twitter_handle = models.CharField(max_length=20, blank=True)
     twitter_hashtag = models.CharField(max_length=20, blank=True)
-    topics = models.ManyToManyField(Topic, blank=True)
     tags = ArrayField(models.CharField(max_length=100), blank=True, default=[])
 
     watchers = models.ManyToManyField(User, blank=True)
@@ -222,7 +221,6 @@ class SavedSearch(models.Model):
     owner = models.ForeignKey(User)
     q = models.CharField(max_length=254, default='', blank=True)
     country = CountryField(default='', blank=True)
-    topic = models.ForeignKey(Topic, null=True, blank=True)
     tags = ArrayField(models.CharField(max_length=100), blank=True, default=[])
 
     def get_absolute_url(self):

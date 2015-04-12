@@ -23,7 +23,7 @@ def filters(search):
     return [t.split(':') for t in tokenize_query(search) if ':' in t]
 
 
-def results(queryset=None, q='', location='', topic=''):
+def results(queryset=None, q='', location='', topics=None):
     qs = queryset
     if qs is None:
         qs = models.Call.open_and_approved()
@@ -39,8 +39,8 @@ def results(queryset=None, q='', location='', topic=''):
     if location:
         qs = qs.filter(conference__country=location.upper())
 
-    if topic:
-        qs = qs.filter(conference__topics__value=topic.lower())
+    if topics:
+        qs = qs.filter(conference__tags__contains=topics)
 
     return qs
 
@@ -50,8 +50,7 @@ def find_new_calls(user):
     sent = set(mailings.values_list('call', flat=True))
 
     for ss in models.SavedSearch.objects.filter(owner=user):
-        calls = results(q=ss.q, location=ss.country.code,
-                        topic=ss.topic.value if ss.topic else '')
+        calls = results(q=ss.q, location=ss.country.code, topics=ss.tags)
 
         # Only look for calls that are newer than the saved search
         # and haven't already been sent
