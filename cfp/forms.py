@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.forms.widgets import Select
+from django.utils import timezone
 
 from cfp.models import Profile, Suggestion, token
 
@@ -31,6 +32,7 @@ class UserCreationForm(forms.ModelForm):
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
         user.username = token(25)
+        user.last_login = timezone.now()
         user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()
