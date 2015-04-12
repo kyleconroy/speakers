@@ -38,16 +38,9 @@ def clone(modeladmin, request, queryset):
         form.save()
 
         for field in fields:
-            options = field.option_set.all()
-
             field.pk = None
             field.form = form
             field.save()
-
-            for option in options:
-                option.pk = None
-                option.field = field
-                option.save()
 clone.short_description = "Clone form"
 
 
@@ -59,13 +52,9 @@ class FormAdmin(admin.ModelAdmin):
     list_display = ('name', 'created',)
 
 
-class OptionInline(admin.StackedInline):
-    model = models.Option
-
-
 @admin.register(models.Field)
 class FieldAdmin(admin.ModelAdmin):
-    inlines = [OptionInline]
+    pass
 
 
 class EntryInline(admin.TabularInline):

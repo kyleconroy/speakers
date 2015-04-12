@@ -2,6 +2,7 @@ from collections import OrderedDict
 from django.db import transaction
 from django.db import models
 from django import forms
+from django.contrib.postgres.fields import ArrayField
 
 
 class Form(models.Model):
@@ -124,6 +125,9 @@ class Field(models.Model):
     widget = models.SmallIntegerField(choices=WIDGETS, default=0, blank=True)
     help_text = models.CharField(max_length=255, default='', blank=True)
     order = models.SmallIntegerField(default=0, blank=True)
+    options = ArrayField(
+        models.CharField(max_length=225), blank=True, default=[]
+    )
 
     def __str__(self):
         return self.label or self.name
@@ -140,8 +144,7 @@ class Field(models.Model):
 
     def choices(self):
         if self.kind in set([self.CHOICE, self.MULTIPLECHOICE]):
-            cs = self.option_set.values_list('id', 'value').order_by('id')
-            return [(str(i), v) for i, v in cs]
+            return [(str(i), v) for i, v in enumerate(sorted(self.options))]
         else:
             return []
 

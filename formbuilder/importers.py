@@ -60,12 +60,10 @@ def parse_google_form(html):
 
         if question.find('select'):
             select = question.find('select')
-            for option in select.find_all('option'):
-                field.option_set.create(value=option.text.strip())
+            field.options = [o.text.strip() for o in select.find_all('option')]
 
         if question.find('ul'):
             ul = question.find('ul')
-            for option in ul.find_all('li'):
-                field.option_set.create(value=option.text.strip())
+            field.options = [o.text.strip() for o in ul.find_all('li')]
 
     return form
