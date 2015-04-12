@@ -167,14 +167,6 @@ class Field(models.Model):
         unique_together = ("form", "name")
 
 
-class Option(models.Model):
-    field = models.ForeignKey(Field)
-    value = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.value
-
-
 class Submission(models.Model):
     form = models.ForeignKey(Form)
 
