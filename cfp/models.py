@@ -7,6 +7,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.contrib.postgres.fields import ArrayField
 
 from django_countries.fields import CountryField
 from django_fsm import FSMField, transition
@@ -46,6 +47,7 @@ class Conference(models.Model):
     twitter_handle = models.CharField(max_length=20, blank=True)
     twitter_hashtag = models.CharField(max_length=20, blank=True)
     topics = models.ManyToManyField(Topic, blank=True)
+    tags = ArrayField(models.CharField(max_length=100), blank=True, default=[])
 
     watchers = models.ManyToManyField(User, blank=True)
 
@@ -221,20 +223,24 @@ class SavedSearch(models.Model):
     q = models.CharField(max_length=254, default='', blank=True)
     country = CountryField(default='', blank=True)
     topic = models.ForeignKey(Topic, null=True, blank=True)
+    tags = ArrayField(models.CharField(max_length=100), blank=True, default=[])
 
     def get_absolute_url(self):
-        return "/?" + urllib.parse.urlencode({
-            'q': self.q,
-            'location': self.country.code.lower(),
-            'topic': self.topic.value if self.topic else '',
-        })
+        params = {}
+        if self.country:
+            params['location'] = self.country.code.lower()
+        if self.tags:
+            params['topic'] = self.tags
+        if self.q:
+            params['q'] = self.q
+        return "/?" + urllib.parse.urlencode(params, True)
 
     def __str__(self):
         info = "calls"
         if self.country:
             info += " in the {}".format(self.country.name)
-        if self.topic:
-            info += " about {}".format(self.topic.name)
+        if self.tags:
+            info += " about {}".format(", ".join(self.tags))
         if self.q:
             info += " matching \"{}\"".format(self.q)
         return info

@@ -330,7 +330,7 @@ def save_search(request):
             owner=request.user,
             q=form.cleaned_data['q'],
             country=form.cleaned_data['location'].upper(),
-            topic=topic,
+            tags=[topic.value],
         )
         if created:
             messages.success(
@@ -373,6 +373,10 @@ class CallList(ListView):
         q = self.search.cleaned_data['q']
         found_topic = Topic.objects.filter(value=topic).first()
 
+        tags = []
+        if found_topic:
+            tags = [found_topic.value]
+
         qs = search.results(queryset=qs, q=q, location=location, topic=topic)
 
         if self.request.user.is_authenticated():
@@ -380,14 +384,14 @@ class CallList(ListView):
                 owner=self.request.user,
                 q=q,
                 country=location.upper(),
-                topic=found_topic,
+                tags=tags,
             ).first()
 
         if self.saved_search is None:
             self.saved_search = SavedSearch(
                 q=q,
                 country=location.upper(),
-                topic=found_topic,
+                tags=tags,
             )
 
         if sort == 'newest':
