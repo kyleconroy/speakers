@@ -109,6 +109,8 @@ class Common(Configuration):
         'django.contrib.auth.backends.ModelBackend',
     )
 
+    SPEAKER_SUBMISSION = True
+
 
 class Development(Common):
     """
@@ -137,6 +139,8 @@ class Production(Common):
         'djangosecure',
         'raven.contrib.django.raven_compat',
     )
+
+    SPEAKER_SUBMISSION = False
 
     ALLOWED_HOSTS = [
         'speakers.herokuapp.com',

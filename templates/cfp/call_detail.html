@@ -86,7 +86,10 @@
       {% endif %}
       {% if call.is_open %}
       <h3>Submit a talk</h3>
-      {% if form %}
+      {% if not submission_open %}
+      <p>{{conf.name}} is accepting speaker submissions! Click the link the below to submit your proposal via the conference's website.</p>
+      <a class="btn btn-primary" href="{{call.application_url}}">Submit a talk today</a>
+      {% elif form %}
       <form action="" method="post" class="form">
         {% csrf_token %}
         {{ form.as_p }}

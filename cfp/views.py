@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.syndication.views import Feed
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.forms.models import modelform_factory
 from django.views.generic import DetailView
 from django.views.generic import ListView
@@ -246,7 +247,10 @@ class CallEdit(StaffRequiredMixin, UpdateView):
 def call_detail_and_form(request, slug, year):
     call = get_object_or_404(Call, conference__start__year=year,
                              conference__slug=slug)
-    context = {'call': call}
+    context = {
+        'call': call,
+        'submission_open': settings.SPEAKER_SUBMISSION,
+    }
 
     if request.user.is_authenticated():
         context['tracking'] = request.user.conference_set.\
