@@ -92,3 +92,6 @@ local_settings.py
 db.sqlite3
 keys
 node_modules
+
+# Heroku
+latest.dump

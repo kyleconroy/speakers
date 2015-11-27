@@ -91,7 +91,7 @@ class Common(Configuration):
     STATIC_URL = '/static/'
 
     DATABASES = values.DatabaseURLValue(
-        'sqlite:///{}'.format(os.path.join(BASE_DIR, 'db.sqlite3'))
+        'postgres://postgres@localhost:5432/speakers'
     )
 
     SOCIAL_AUTH_GITHUB_KEY = values.Value()
