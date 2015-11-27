@@ -49,7 +49,7 @@ def make_spam(modeladmin, request, queryset):
     for call in queryset.all():
         call.quarantine()
         call.save()
-make_approved.short_description = "Mark selected calls as spam"
+make_spam.short_description = "Mark selected calls as spam"
 
 
 def make_rejected(modeladmin, request, queryset):
