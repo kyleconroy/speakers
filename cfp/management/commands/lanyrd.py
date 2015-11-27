@@ -82,7 +82,7 @@ class Command(SentryCommand):
             match = soup.select("p.prominent-place a")
         if match:
             if match[0].text in ["England", "Wales"]:
-                conf.country = 'UK'
+                conf.country = 'GB'
             else:
                 conf.country = lookup.get(match[0].text, 'US')
 
