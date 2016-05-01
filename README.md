@@ -1,4 +1,4 @@
-# CallToSpeakers
+# Call to Speakers [![Build Status](https://travis-ci.org/kyleconroy/speakers.svg?branch=master)](https://travis-ci.org/kyleconroy/speakers)
 
 ## How to run this locally
 
