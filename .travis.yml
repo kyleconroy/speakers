@@ -1,4 +1,4 @@
 language: python
 python:
   - "3.4"
-script: ./manage.py test
+script: python manage.py test
